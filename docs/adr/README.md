@@ -31,5 +31,6 @@
 | [0008](0008-execution-framework.md) | 環境の準備と実行：M0は自作の実行スクリプト | 採用 | 2026-10-26 |
 | [0009](0009-models-for-m0.md) | M0で使うモデル：Claude Opus 5.5 と Qwen3.8-27B | 採用 | 2026-10-26 |
 | [0010](0010-self-host-langfuse.md) | Langfuseの運用：AWS上に自分で立てる | 採用 | 2026-10-26 |
+| [0011](0011-immutable-infrastructure.md) | インフラはイミュータブルにする | 採用 | 2026-10-26 |
 
 調査の結果は [docs/research/](../research/) にある。
