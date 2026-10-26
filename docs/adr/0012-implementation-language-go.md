@@ -41,9 +41,84 @@ Goで必要なものがそろっているかを確認した（2026-10-26）。
 
 ## 影響
 
+### Goで書く範囲とLangfuseへの送り方
+
+Goで書くのは **評価用ハーネス**（実行スクリプト・採点器・レポート）である（設計書 1.3）。M0の被験ハーネス（H0）はプロンプトだけで、Goのコードにはならない。Langfuseに送る処理は、実行スクリプトの一部としてGoで書く。
+
+M0の1回の実行の流れ：
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant R as 実行スクリプト（Go）
+    participant M as モデル<br/>Opus 5.5 API ／ Ollama（Qwen）
+    participant G as 採点器（Goのコマンド）
+    participant L as Langfuse
+
+    R->>R: 作業ディレクトリを作り、画像とH0のプロンプトを置く
+    R->>M: 画像＋プロンプトを送る<br/>（Opusは公式Go SDK、QwenはOpenAI互換のGo SDK）
+    M-->>R: 出力JSON、トークン数
+    R->>L: トレースを送る（OpenTelemetryのGo SDK）<br/>入力・出力・モデル名・トークン数・所要時間
+    R->>R: output.json と run.yaml を results/ に保存
+    R->>G: output.json と gold.csv を渡して実行
+    G-->>R: metrics.json（正解・不明・誤答の件数、誤答率など）
+    R->>L: スコアを送る（LangfuseのREST API）
+```
+
+| 送るもの | 送り方 | Goで書く部分 |
+|---|---|---|
+| トレース（モデルに何を送り、何が返ってきたか） | OpenTelemetryのGo SDK | モデルの呼び出しの前後に区間（span）を作り、モデル名やトークン数を属性として付ける |
+| スコア（採点の結果）、データセット | LangfuseのREST API | HTTPでJSONを送る薄いクライアント |
+
 ### Inspect AIとの関係
 
-Goにしても、Inspect AIは使える。Inspectの上で動かすもの（タスクの定義、モデルの呼び出し方、採点の呼び出し）はPythonで書くが、Inspectから外部のコマンドを呼び出せるので、Goで作ったものと組み合わせられる。
+Goにしても、Inspect AIは使える。Inspect AIは、評価用ハーネスのうち **実行スクリプトの役割を代わりに受け持つ** フレームワークである。M2でInspect AIに移ると、Goの実行スクリプトの役割をInspectが引き継ぐ。Goの採点器はそのまま残し、Inspectから呼び出す。
+
+```mermaid
+flowchart TB
+    subgraph M0["M0：すべてGo"]
+        R0["実行スクリプト（Go）<br/>モデルの呼び出し・繰り返し・ログ・Langfuseへの送信"]
+        G0["採点器（Goのコマンド）"]
+        R0 -- "output.json と gold.csv を渡す" --> G0
+        G0 -- "metrics.json を返す" --> R0
+    end
+
+    subgraph M2["M2：Inspect AIに移った場合"]
+        I["Inspect AI（Python）<br/>モデルの呼び出し・繰り返し・並列実行・ログ"]
+        P["つなぐ部分（Python）<br/>タスクの定義、採点の呼び出し"]
+        G2["採点器（Goのコマンド）<br/>M0と同じもの"]
+        I --> P
+        P -- "output.json と gold.csv を渡す" --> G2
+        G2 -- "metrics.json を返す" --> P
+    end
+```
+
+「つなぐ部分」は、Inspectのルールに沿って書くPythonのコードで、次の2つだけを受け持つ。
+
+- **タスクの定義**：`tasks/` の画像と正解データを、Inspectの問題として読み込む。どのモデルとプロンプトで解かせるかを指定する。
+- **採点の呼び出し**：Inspectが受け取ったモデルの出力をファイルに書き、Goの採点器のコマンドを実行し、`metrics.json` を読んでInspectに返す。
+
+Inspect AIで1問を採点する流れ：
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant I as Inspect AI（Python）
+    participant M as モデル
+    participant P as 採点の呼び出し（Python）
+    participant G as 採点器（Goのコマンド）
+
+    I->>M: 画像＋プロンプトを送る（Inspectの機能）
+    M-->>I: 出力JSON
+    I->>P: 採点を依頼する
+    P->>P: 出力を output.json に書く
+    P->>G: コマンドを実行する（output.json と gold.csv を渡す）
+    G-->>P: metrics.json
+    P-->>I: 指標（正解・不明・誤答など）を返す
+    I->>I: ログに記録し、構成ごとに集計する
+```
+
+採点のロジック（位置の対応付け、印刷名の正規化、正解・不明・誤答の判定）は、すべてGoの採点器の中にある。Pythonの側はファイルを渡して結果を受け取るだけなので、採点のルールを2つの言語で二重に持つことはない。
 
 M2でInspect AIに移る場合（[0008](0008-execution-framework.md)）、M0で作ったものは次のように扱う。
 
