@@ -27,3 +27,5 @@
 | [0004](0004-infrastructure-as-code.md) | インフラをIaC化する（ツールの候補：Terraform） | 提案 | 2026-10-26 |
 | [0005](0005-gpu-environment.md) | ローカルモデルを動かすGPU環境：AWSかWindows PCか | 提案 | 2026-10-26 |
 | [0006](0006-cloud-model-authentication.md) | クラウドのモデルの認証：APIキーかサブスクか | 提案 | 2026-10-26 |
+| [0007](0007-use-langfuse-for-scoring-and-tracing.md) | 記録・採点・比較・観測にLangfuseを使う | 採用 | 2026-10-26 |
+| [0008](0008-execution-framework.md) | 環境の準備と実行：自作か評価フレームワークか | 提案 | 2026-10-26 |
