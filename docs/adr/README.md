@@ -34,5 +34,6 @@
 | [0011](0011-immutable-infrastructure.md) | インフラはイミュータブルにする | 採用 | 2026-10-26 |
 | [0012](0012-implementation-language-go.md) | 実装言語：Go（0008・0010の一部を置き換え） | 採用 | 2026-10-26 |
 | [0013](0013-aws-account-classic-sign-up.md) | AWSのアカウントは従来の方法で作る | 採用 | 2026-10-27 |
+| [0014](0014-unify-region-tokyo.md) | リージョンは東京に統一する（0005・0010の一部を置き換え） | 採用 | 2026-10-27 |
 
 調査の結果は [docs/research/](../research/) にある。
