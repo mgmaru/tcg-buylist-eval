@@ -92,4 +92,12 @@ tcg-buylist-eval/
 
 ## ドキュメント
 
-- [設計書](docs/tcg-buylist-eval-design.md)
+| ドキュメント | 内容 |
+|---|---|
+| [設計書](docs/tcg-buylist-eval-design.md) | 評価用ハーネスの設計 |
+| [TODO](TODO.md) | M0フェーズのTODO |
+| [ADR](docs/adr/README.md) | 決めたことと、その理由 |
+| [調査](docs/research/) | 決定の材料にした調査の結果 |
+| [設計・管理論](docs/guides/) | 一般的な考え方（例：[AWSのアカウントの設計と管理の考え方](docs/guides/aws-account-design.md)） |
+| [運用](docs/operations/) | このプロジェクトの正式な運用のルールと手順（例：[AWSアカウントの運用](docs/operations/aws-accounts.md)） |
+| [作業の記録](docs/setup/) | いつ、何をしたか（例：[AWSのアカウントの準備](docs/setup/aws-account.md)） |
