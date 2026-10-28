@@ -179,7 +179,9 @@ Langfuseは記録・採点・比較・観測を受け持つ。環境の準備・
 
 差し込み口の決まりは、タスクの仕様や出力のスキーマを作る前に決める。
 
-- [ ] 🤝 差し込み口の設計を決める（設計書 0.3）。Claude の案：[ADR-0016](docs/adr/0016-plug-points.md)（提案）。ADRの「決めること」に答えて採用にする
+- [ ] 🤝 差し込み口の設計を決める（設計書 0.3）
+  - 採用：[ADR-0016](docs/adr/0016-task-folder-per-task.md)（タスクごとのフォルダ）、[ADR-0017](docs/adr/0017-grader-single-go-module.md)（採点器は1つのGoのモジュール）、[ADR-0018](docs/adr/0018-results-include-subject-info.md)（結果に被験エージェントの情報）、[ADR-0019](docs/adr/0019-gold-schema-machine-readable.md)（正解データの列の定義はYAML）
+  - 提案（それぞれの「決めること」に答えて採用にする）：[ADR-0020](docs/adr/0020-terms-task-and-sample.md)（タスクとサンプル）、[ADR-0021](docs/adr/0021-subject-config-split.md)（設定を3つに分ける）、[ADR-0022](docs/adr/0022-harness-level-and-version.md)（段階と版）、[ADR-0023](docs/adr/0023-grader-interface.md)（採点器の入出力）、[ADR-0024](docs/adr/0024-show-harness-changes-and-effects.md)（改善の差分と結果）、[ADR-0025](docs/adr/0025-plug-points-m0-scope.md)（M0で作る範囲）
   - タスクの差し込み口：1つのタスクを構成するもの（タスクセット、出力のスキーマ、採点器）と、その置き方
   - 被験エージェントの差し込み口：被験構成の設定ファイルの形（モデル、被験ハーネス、使えるツール）
   - 採点器の入出力の決まり：受け取るもの（出力JSON、正解データ）と返すもの（`metrics.json`）（ADR-0012）
@@ -191,7 +193,7 @@ Langfuseは記録・採点・比較・観測を受け持つ。環境の準備・
   - 印刷名は画像に書いてある通りに出すこと（知識で「EX」などを補わない）（9.2）
 - [ ] 🤖 `schemas/output.schema.json`：出力形式を JSON Schema で定義する（5.3）
   - M0では `card_id` を空で許可し、`pack`＋`number` から仮のキーを作れるようにする
-- [ ] 🤖 `schemas/gold.md`：正解データの列定義を書く（5.2）
+- [ ] 🤖 `tasks/<タスク名>/schemas/gold.schema.yaml`：正解データの列の定義を、Table Schemaに沿ったYAMLで書く（5.2、ADR-0019）
 - [ ] 🤝 `docs/gold-guideline.md`：正解データの作成ルールを書く（10.2）
   - 全行を確認する／下書きに使ったモデルを記録する／印刷名は画像通り／直したら `gold_version` を上げる
 
