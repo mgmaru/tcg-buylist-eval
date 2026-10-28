@@ -24,7 +24,7 @@ TerraformでGPUサーバーなどのリソースを作る前に、次の状態�
 | 5 | IAM Identity Centerを有効にする | ルートユーザー | 済み |
 | 6 | 作業用のユーザーと権限を作る | ルートユーザー | 済み |
 | 7 | 作業用のユーザーでサインインして確かめる | 作業用のユーザー | 済み |
-| ― | プロジェクト用のアカウントを作る（[0015](../adr/0015-account-structure.md)） | 作業用のユーザー | これから |
+| ― | プロジェクト用のアカウントを作る（[0015](../adr/0015-account-structure.md)） | 作業用のユーザー | 済み（予算はこれから） |
 | 8 | GPUサーバーの利用枠を申請する（プロジェクト用のアカウントで） | 作業用のユーザー | これから |
 
 ```mermaid
@@ -266,6 +266,63 @@ sequenceDiagram
 
 ルートユーザーは、ルートユーザーにしかできない作業と非常時だけに使う。場面の一覧と、非常用の鍵として保つための注意点は、[設計・管理論](../guides/aws-account-design.md) 6章にまとめた。
 
+### 4.8 プロジェクト用のアカウントを作る
+
+- 作業日：2026-10-28
+- 決定：[0015](../adr/0015-account-structure.md)、手順：[運用](../operations/aws-accounts.md) 5章
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant U as 作業用のユーザー
+    participant M as 管理アカウント<br/>（AdministratorAccess のロール）
+    participant O as AWS Organizations
+    participant I as IAM Identity Center（東京）
+    participant T as tcg-buylist-eval のアカウント
+
+    U->>M: AWSアクセスポータルから、管理アカウントの AdministratorAccess でサインイン
+    M->>O: 1. Workloads（OU）を作る
+    M->>O: 2. アカウント tcg-buylist-eval を作る
+    O->>T: アカウントができる（OrganizationAccountAccessRole が自動で作られる）
+    M->>O: 3. tcg-buylist-eval を Workloads（OU）に移す
+    M->>I: 4. 作業用のユーザー × AdministratorAccess × tcg-buylist-eval を割り当てる
+    I->>T: AWSReservedSSO_AdministratorAccess_... のロールが自動で作られる
+    U->>T: 5. AWSアクセスポータルから、tcg-buylist-eval の AdministratorAccess でサインイン
+```
+
+| 手順 | 誰が | どのアカウントで | どの権限で | どのサービスで | 何をしたか |
+|---|---|---|---|---|---|
+| 1 | 作業用のユーザー | 管理アカウント | AdministratorAccess | AWS Organizations（グローバル） | Workloads（OU）を作った |
+| 2 | 作業用のユーザー | 管理アカウント | AdministratorAccess | AWS Organizations（グローバル） | アカウント `tcg-buylist-eval` を作った。メールアドレスは「＋tcg-buylist-eval」の別名、IAMのロールの名前は初期値 |
+| 3 | 作業用のユーザー | 管理アカウント | AdministratorAccess | AWS Organizations（グローバル） | `tcg-buylist-eval` を Workloads（OU）に移した |
+| 4 | 作業用のユーザー | 管理アカウント | AdministratorAccess | IAM Identity Center（東京） | 作業用のユーザー × AdministratorAccess × `tcg-buylist-eval` を割り当てた |
+| 5 | 作業用のユーザー | **tcg-buylist-eval** | AdministratorAccess | AWSアクセスポータル | 新しいアカウントにサインインできることを確かめた |
+
+- 手順1〜4は、組織の管理の作業なので、管理アカウントで行った（組織の操作と割り当ては、管理アカウントからしかできない）。管理アカウントを「組織の管理だけに使う」方針どおりの使い方。
+- 許可セットは1つだが、割り当てたアカウントごとに、そのアカウントの中にロールが作られる。手順1〜4では管理アカウントのロールを、手順5では `tcg-buylist-eval` のロールを借りていた。
+- 裏側で、2種類のロールが自動で作られた。
+
+| ロール | いつ作られたか | 何のためか |
+|---|---|---|
+| `OrganizationAccountAccessRole` | 手順2（アカウントを作ったとき） | 管理アカウントから新しいアカウントに入るための、非常用のロール。普段は使わない |
+| `AWSReservedSSO_AdministratorAccess_...` | 手順4（割り当てをしたとき） | 作業用のユーザーが、新しいアカウントで普段の作業をするためのロール |
+
+- `tcg-buylist-eval` のルートユーザーは使っていない。最初はパスワードがない。
+
+作業後の構成：
+
+```
+組織
+└── Root
+    ├── 管理アカウント
+    │     ├── IAM Identity Center（東京）
+    │     └── ロール AWSReservedSSO_AdministratorAccess_...
+    └── Workloads（OU）
+        └── tcg-buylist-eval
+              ├── ロール OrganizationAccountAccessRole（非常用）
+              └── ロール AWSReservedSSO_AdministratorAccess_...（普段の作業用）
+```
+
 ## 5. 作業中に出てきた疑問
 
 | 疑問 | 答え |
@@ -287,6 +344,7 @@ sequenceDiagram
 | 作業用のユーザーでサインインするようになったら、ルートユーザーはもう使わないのか？ | ごくたまに使う。アカウントの設定の変更、サポートプランの変更、アカウントの解約、作業用のユーザーで入れなくなったときの非常時など。非常用の鍵として、確実に使える状態に保つ（設計・管理論 6章） |
 | アカウントの分け方は、財務の視点から決めることもあるのか？ | ある。アカウントは費用の境界がはっきりし、費用の持ち主や予算の単位にしやすい。細かい単位はタグで分ける。予算は通知で、制限ではない（制限に近いことは予算のアクションでできる）。利用枠もアカウントごと（設計・管理論 9章） |
 | AWS Builder IDとは何か？アカウントとは違うのか？ | 違う。AWSの学習のサービスや一部のツールを使うための個人のプロフィールで、それだけではリソースも請求も付かない。「Googleで続行」で作られ、新しいAWSエクスペリエンスのプロジェクト「Future Startup」の持ち主になっている。プロジェクトは閉じ、Builder IDは残してよい（設計・管理論 3.4） |
+| 管理アカウントは、ルートユーザーで作った最初のアカウントで、AdministratorAccessが付いているアカウントのことか？tcg-buylist-evalにもAdministratorAccessがあるが、管理アカウントか？ | 管理アカウントは、最初にサインアップして組織を作ったアカウントで、組織に1つだけ。tcg-buylist-evalは管理アカウントではなく **メンバーアカウント**。AdministratorAccessは「そのアカウントの中で何でもできる」というユーザーの権限で、アカウントの種類とは関係ない。メンバーアカウントでは、AdministratorAccessでも組織の操作はできない（設計・管理論 3.3） |
 | 今のアカウントは管理アカウントであって、ルートユーザーではないのか？ | 管理アカウントはアカウント（場所）、ルートユーザーはユーザー（人）で、種類が違う。今は「管理アカウントに、ルートユーザーとしてサインインしている」状態（設計・管理論 3章） |
 | アカウントの中にユーザーがいるのか？ | ルートユーザーとIAMユーザーはアカウントの中。作業用のユーザー（IAM Identity Center）は組織の側にいて、アカウントに割り当てて使う（設計・管理論 3章） |
 | コンソールの右上のアカウントは管理アカウントか？その上にルートユーザーがいるのか？ | 右上は管理アカウント。ルートユーザーは上ではなく、アカウントの中の特別なユーザー。組織の画面の「ルート」はルートユーザーとは別物（設計・管理論 4章） |
@@ -308,9 +366,9 @@ sequenceDiagram
 手順は [AWSアカウントの運用](../operations/aws-accounts.md) 5章のとおり。
 
 - このプロジェクト用のアカウント `tcg-buylist-eval` を作る（[0015](../adr/0015-account-structure.md)）
-  - Workloads（OU）を作る
-  - アカウントを作り、Workloads（OU）に移す
-  - 作業用のユーザーと許可セットを割り当て、サインインを確かめる
+  - Workloads（OU）を作る（済み）
+  - アカウントを作り、Workloads（OU）に移す（済み）
+  - 作業用のユーザーと許可セットを割り当て、サインインを確かめる（済み）
   - アカウントの予算を作る
 - 8\. GPUサーバーの利用枠（G・VTインスタンスのオンデマンド）を、**tcg-buylist-eval のアカウントの東京** で8 vCPU申請する（利用枠はアカウントごとのため、管理アカウントでは申請しない）
 - 誤って作った新しいAWSエクスペリエンスのプロジェクト（「Future Startup」）を閉じる。AWS Builder IDは残してよい
