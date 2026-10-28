@@ -66,11 +66,11 @@ Langfuseは記録・採点・比較・観測を受け持つ。環境の準備・
   - [x] 👤 普段の作業用のユーザーを作る（IAM Identity Center、東京）（2026-10-27）
   - [x] 👤 作業用のユーザーでサインインし、費用の画面を見られるか確かめる（2026-10-28）
   - [ ] 👤 誤って作った新しいAWSエクスペリエンスのプロファイル（プロジェクト「Future Startup」、シドニー）を閉じる。AWS Builder IDは残してよい（ADR-0013）
-- [ ] 👤 このプロジェクト用のアカウント `tcg-buylist-eval` を作る（ADR-0015）。手順は [docs/operations/aws-accounts.md](docs/operations/aws-accounts.md) 5章
+- [x] 👤 このプロジェクト用のアカウント `tcg-buylist-eval` を作る（ADR-0015）。手順は [docs/operations/aws-accounts.md](docs/operations/aws-accounts.md) 5章
   - [x] 👤 Workloads（OU）を作る（2026-10-28）
   - [x] 👤 アカウント `tcg-buylist-eval` を作り、Workloads（OU）に移す（2026-10-28）
   - [x] 👤 作業用のユーザーと許可セット「AdministratorAccess」を割り当て、サインインできることを確かめる（2026-10-28）
-  - [ ] 👤 アカウントの予算を作る（金額は作るときに決める）
+  - [x] 👤 アカウントの予算を作る：**50ドル**（tcg-buylist-eval-monthly、2026-10-28）（組織全体の予算60ドルから配る。[運用](docs/operations/aws-accounts.md) 4.3）
 - [ ] 👤 GPUサーバーの利用枠（G・VTインスタンスのオンデマンド）を、**tcg-buylist-eval のアカウントの東京** で8 vCPU申請する。通るまで時間がかかることがあるので、アカウントを作ったら早めに行う（ADR-0005、ADR-0014、ADR-0015）
 - [x] 👤 クラウドのモデルの認証を決める：**APIキー**（ADR-0006）
 - [ ] 👤 Anthropicのコンソールで、この評価専用のワークスペースとAPIキーを作り、利用額の上限（月30ドル程度）を設定する（ADR-0006）
