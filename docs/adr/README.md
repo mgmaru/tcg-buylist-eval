@@ -43,7 +43,7 @@
 | [0019](0019-gold-schema-machine-readable.md) | 正解データの列の定義は、機械で読めるYAMLで書く | 採用 | 2026-10-28 |
 | [0020](0020-terms-task-and-sample.md) | 「タスク」と「サンプル」を言葉で分ける | 採用 | 2026-10-28 |
 | [0021](0021-subject-config-split.md) | 被験エージェントの設定を、モデル・被験ハーネス・被験構成の3つに分ける | 採用 | 2026-10-28 |
-| [0022](0022-harness-level-and-components.md) | 被験ハーネスを「段階」と「部品の組み合わせ」で表す | 提案 | 2026-10-28 |
+| [0022](0022-harness-level-and-components.md) | 被験ハーネスを「段階」と「部品の組み合わせ」で表す | 採用 | 2026-10-28 |
 | [0023](0023-grader-interface.md) | 採点器の入出力：grade と summarize の2つのコマンドにする | 採用 | 2026-10-28 |
 | [0024](0024-show-harness-changes-and-effects.md) | 被験ハーネスの改善の差分と、結果への影響を見えるようにする | 採用 | 2026-10-28 |
 | [0025](0025-plug-points-m0-scope.md) | 差し込み口のうち、M0 で作る範囲 | 採用 | 2026-10-28 |
