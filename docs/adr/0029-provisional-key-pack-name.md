@@ -1,8 +1,8 @@
 # 0029. 仮のキーのパックの名前は、公式の商品名から決まった語を外してそろえる
 
-- ステータス：提案
+- ステータス：採用
 - 日付：2026-10-29
-- 決定者：kajiwara（未決定。PRでレビューする）
+- 決定者：kajiwara
 - 関係するADR：[0026](0026-provisional-key-pack-number-variant.md)（仮のキーは「パック＋番号＋仕様」）
 - 調査：[docs/research/card-data-sources.md](../research/card-data-sources.md)
 

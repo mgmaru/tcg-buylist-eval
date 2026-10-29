@@ -1,8 +1,8 @@
 # 0027. 仮のキーの仕様は「版・加工・スタンプ」の軸に分け、確かめられない軸は「指定なし」にする
 
-- ステータス：提案
+- ステータス：採用
 - 日付：2026-10-29
-- 決定者：kajiwara（未決定。PRでレビューする）
+- 決定者：kajiwara
 - 関係するADR：[0026](0026-provisional-key-pack-number-variant.md)（仮のキーは「パック＋番号＋仕様」）
 - 調査：[docs/research/card-data-sources.md](../research/card-data-sources.md)
 

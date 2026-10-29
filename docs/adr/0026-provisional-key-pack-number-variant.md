@@ -1,8 +1,8 @@
 # 0026. 仮のキーは「パック＋番号＋仕様」で作る（公式サイトのIDは使わない）
 
-- ステータス：提案
+- ステータス：採用
 - 日付：2026-10-29
-- 決定者：kajiwara（未決定。PRでレビューする）
+- 決定者：kajiwara
 - 関係するADR：[0019](0019-gold-schema-machine-readable.md)（正解データの列の定義）、[0027](0027-provisional-key-variant.md)（仕様の扱い）、[0028](0028-unnumbered-cards-out-of-m0.md)（番号のないカード）、[0029](0029-provisional-key-pack-name.md)（パックの名前）
 - 調査：[docs/research/card-data-sources.md](../research/card-data-sources.md)
 
