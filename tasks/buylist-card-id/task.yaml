@@ -1,0 +1,17 @@
+# タスクの目録（ADR-0016）。評価用ハーネスは、このファイルからタスクの中身の場所を知る。
+id: buylist-card-id
+version: 1
+spec: spec.yaml                    # ADR-0030
+input:
+  files: [input.jpg]
+output:
+  schema: schemas/output.schema.json
+gold:
+  file: gold.csv
+  schema: schemas/gold.schema.yaml
+samples: samples/
+grader: buylist-card-id            # 採点器の名前（ADR-0017）
+pass:                              # 合格ライン（仮。設計書 8.4）
+  wrong_rate: {max: 0.02}
+  identified_rate: {min: 0.80}
+  format_errors: {max: 0}

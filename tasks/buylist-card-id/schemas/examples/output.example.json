@@ -1,0 +1,59 @@
+{
+  "grid": {
+    "rows": 3,
+    "cols": 7
+  },
+  "cards": [
+    {
+      "position": {
+        "row": 1,
+        "col": 1
+      },
+      "printed": {
+        "name": "リザードン",
+        "hp": 160,
+        "attacks": [
+          "ばくれつだん"
+        ]
+      },
+      "price_jpy": 1800000,
+      "identification": {
+        "status": "identified",
+        "card": {
+          "pack": "プラズマゲイル",
+          "number": "077/070",
+          "variant": {
+            "edition": "指定なし",
+            "finish": "ノーマル",
+            "stamp": "なし"
+          }
+        },
+        "confidence": 0.9
+      }
+    },
+    {
+      "position": {
+        "row": 1,
+        "col": 2
+      },
+      "printed": {
+        "name": "レシラム"
+      },
+      "price_jpy": null,
+      "identification": {
+        "status": "unknown",
+        "candidates": [
+          {
+            "pack": "ブラックコレクション",
+            "number": "055/053",
+            "variant": {
+              "edition": "指定なし",
+              "finish": "指定なし",
+              "stamp": "指定なし"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

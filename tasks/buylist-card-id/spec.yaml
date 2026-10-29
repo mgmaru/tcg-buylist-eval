@@ -17,7 +17,13 @@ input:
 
 output:
   schema: schemas/output.schema.json
+  example: schemas/examples/output.example.json
   description: 掲載カードの一覧（JSON）。1枚のカードにつき、位置・印刷内容・価格・特定の結果を1つ出す。
+  values:                          # 値の一覧の場所（中身はスキーマだけが持つ）
+    status: schemas/output.schema.json#/$defs/status
+    edition: schemas/output.schema.json#/$defs/edition
+    finish: schemas/output.schema.json#/$defs/finish
+    stamp: schemas/output.schema.json#/$defs/stamp
 
 rules:
   # 位置
@@ -31,7 +37,7 @@ rules:
   # 読み取り
   - id: R-03
     topic: 読み取り
-    text: 価格は、画像に書かれている買取価格を、円の整数で出す。
+    text: 価格は、画像に書かれている買取価格を、円の整数で出す。価格が書かれていない、または読み取れないときは null にする。
     examples:
       - {printed: "¥1,800,000", output: 1800000}
   - id: R-04

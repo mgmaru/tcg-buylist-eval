@@ -1,0 +1,81 @@
+# 正解データ（gold.csv）の列の定義（Table Schema、ADR-0019）
+#
+# 1行が、買取表の1枚のカード。対象外のカード（ADR-0028）は行に入れず、meta.yaml に記録する。
+# 仕様の軸（edition、finish、stamp）の値の一覧は、output.schema.json の $defs だけが持つ（ADR-0030）。
+# ここでは値の一覧を書かず、採点器が output.schema.json の値と突き合わせて確かめる。
+
+fields:
+  # 位置
+  - name: row
+    type: integer
+    constraints: {required: true, minimum: 1}
+    description: 段（上から1始まり）
+  - name: col
+    type: integer
+    constraints: {required: true, minimum: 1}
+    description: 列（左から1始まり）
+
+  # 画像に印刷されている情報（読み取りの正解）
+  - name: name
+    type: string
+    constraints: {required: true}
+    description: 画像に印刷されている通りのカード名
+  - name: hp
+    type: integer
+    constraints: {minimum: 0}
+    description: 画像に印刷されているHP。画像で読めなければ空
+  - name: price_jpy
+    type: integer
+    constraints: {minimum: 0}
+    description: 買取価格（円）。画像に価格がなければ空
+
+  # 特定の正解（仮のキーの要素。ADR-0026）
+  - name: pack
+    type: string
+    constraints: {required: true}
+    description: 収録パックの商品の名前。ADR-0029 の決まりでそろえる（例：プラズマゲイル）
+  - name: number
+    type: string
+    constraints: {required: true}
+    description: 印刷されている通りのカード番号。分母やプロモの記号も含める（例：055/053、001/BW-P）
+  - name: edition
+    type: string
+    constraints: {required: true}
+    description: 版。値は output.schema.json の $defs/edition。買取表や画像で確かめられなければ「指定なし」
+  - name: finish
+    type: string
+    constraints: {required: true}
+    description: 加工。値は output.schema.json の $defs/finish
+  - name: stamp
+    type: string
+    constraints: {required: true}
+    description: スタンプ。値は output.schema.json の $defs/stamp
+
+  # 補助の情報（採点には使わない）
+  - name: set_code
+    type: string
+    description: 型番（例：BW7）。仮のキーには使わない
+  - name: rarity
+    type: string
+    description: レアリティ（例：UR）
+  - name: card_id
+    type: string
+    description: カードDBのID。M1以降。M0では空
+
+  # 確認の記録（設計書 10.2）
+  - name: verified_by
+    type: string
+    constraints: {required: true}
+    description: 確認した人
+  - name: verified_at
+    type: date
+    constraints: {required: true}
+    description: 確認した日
+  - name: sources
+    type: string
+    description: 照合に使ったサイト。複数なら「;」で区切る（例：公式;遊々亭;ポケモンカードWiki）
+  - name: note
+    type: string
+    description: 補足（例：画像にEXの表記なし）
+
+primaryKey: [row, col]

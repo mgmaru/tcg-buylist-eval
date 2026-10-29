@@ -1,1 +1,15 @@
 _local
+
+# 買取表の画像（公開範囲が決まるまで入れない。TODO 1.4）
+tasks/*/samples/*/input.*
+
+# 実行結果
+results/
+
+# Terraform の状態ファイルと秘密情報
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+.env
+.env.*
