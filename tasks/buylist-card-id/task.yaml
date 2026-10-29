@@ -9,6 +9,7 @@ output:
 gold:
   file: gold.csv
   schema: schemas/gold.schema.yaml
+  guideline: gold-guideline.yaml   # 正解データの作り方
 samples: samples/
 grader: buylist-card-id            # 採点器の名前（ADR-0017）
 pass:                              # 合格ライン（仮。設計書 8.4）
