@@ -198,11 +198,11 @@ Langfuseは記録・採点・比較・観測を受け持つ。環境の準備・
   - 入力・出力、位置（段・列）の数え方
   - 確信がなければ **「不明」と答えてよい** こと、不明の場合は候補を出してよいこと（2.3）
   - 印刷名は画像に書いてある通りに出すこと（知識で「EX」などを補わない）（9.2）
-- [ ] 🤖 `tasks/buylist-card-id/schemas/output.schema.json`：出力形式を JSON Schema で定義する（5.3）。値の一覧（status、版・加工・スタンプ）はここだけに書く（ADR-0030）
+- [x] 🤖 `tasks/buylist-card-id/schemas/output.schema.json`：出力形式を JSON Schema で定義する（5.3）。値の一覧（status、版・加工・スタンプ）はここだけに書く（ADR-0030）
   - M0では `card_id` を持たず、`pack`＋`number`＋`variant` から仮のキーを作る（ADR-0026）
-  - [ ] 👤 PRでレビューする
-- [ ] 🤖 `tasks/buylist-card-id/schemas/gold.schema.yaml`：正解データの列の定義を、Table Schemaに沿ったYAMLで書く（5.2、ADR-0019）
-  - [ ] 👤 PRでレビューする
+  - [x] 👤 PRでレビューする（2026-10-29、ADR-0031）
+- [x] 🤖 `tasks/buylist-card-id/schemas/gold.schema.yaml`：正解データの列の定義を、Table Schemaに沿ったYAMLで書く（5.2、ADR-0019）
+  - [x] 👤 PRでレビューする（2026-10-29、ADR-0031）
 - [x] 🤖 `tasks/buylist-card-id/task.yaml`：タスクの目録を作る（ADR-0016）
 - [ ] 🤝 `docs/gold-guideline.md`：正解データの作成ルールを書く（10.2）
   - 全行を確認する／下書きに使ったモデルを記録する／印刷名は画像通り／直したら `gold_version` を上げる
