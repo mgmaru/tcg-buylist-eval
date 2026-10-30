@@ -27,6 +27,10 @@ fields:
     type: integer
     constraints: {minimum: 0}
     description: 画像に印刷されている通りのHP。画像で読めなければ空。カードの知識で埋めない
+  - name: price_text
+    type: string
+    description: 画像に書かれている通りの買取価格の文字（「1.5万円」など）。価格がなければ空。price_jpy が空のときだけ空にする（ADR-0040）
+    example: 1.5万円
   - name: price_jpy
     type: integer
     constraints: {minimum: 0}
@@ -52,12 +56,12 @@ fields:
   - name: finish
     type: string
     constraints: {required: true}
-    description: 加工。ノーマル、ミラーの種類の名前（マスターボールミラーなど）、指定なし（確かめられない）。推測で埋めない
+    description: 加工。ノーマル、ミラーの種類の名前（マスターボールミラーなど）、その他の加工（ノーマルではないとわかるが、種類が一覧にない、または見分けられない）、指定なし（確かめられない）。推測で埋めない（ADR-0043）
     example: ノーマル
   - name: stamp
     type: string
     constraints: {required: true}
-    description: スタンプ（配布元のロゴなどが、カードの絵の上に押されたもの）。なし（画像に見当たらない）、配布元などの名前、指定なし（画像が粗くて見分けられない）。推測で埋めない（ADR-0036）
+    description: スタンプ（配布元のロゴなどが、カードの絵の上に押されたもの）。なし（画像に見当たらない）、配布元などの名前、その他のスタンプ（押されているとわかるが、どのスタンプか一覧にない、または見分けられない）、指定なし（画像が粗くて見分けられない）。推測で埋めない（ADR-0036、ADR-0043）
     example: なし
 
   # 補助の情報（採点には使わない）

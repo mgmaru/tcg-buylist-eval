@@ -43,9 +43,10 @@
           "description": "画像から読み取った内容。知識で補わない",
           "type": "object",
           "additionalProperties": false,
-          "required": ["name"],
+          "required": ["name", "price_text"],
           "properties": {
             "name": {"type": "string", "minLength": 1, "description": "画像に印刷されている通りのカード名"},
+            "price_text": {"type": ["string", "null"], "minLength": 1, "description": "画像に書かれている通りの買取価格の文字（例：1.5万円）。価格が書かれていない、または読み取れないときは null"},
             "hp": {"type": "integer", "minimum": 0, "description": "読み取れなければ書かない"},
             "attacks": {"type": "array", "items": {"type": "string", "minLength": 1}, "description": "読み取れたワザ名"}
           }
@@ -113,12 +114,12 @@
       "enum": ["1ED", "アンリミ", "なし", "指定なし"]
     },
     "finish": {
-      "description": "加工。指定なし：確かめられない",
-      "enum": ["ノーマル", "指定なし"]
+      "description": "加工。その他の加工：ノーマルではないとわかるが、種類が一覧にない、または見分けられない。指定なし：確かめられない",
+      "enum": ["ノーマル", "その他の加工", "指定なし"]
     },
     "stamp": {
-      "description": "スタンプ（配布元のロゴなどが、カードの絵の上に押されたもの）。なし：画像に見当たらない。指定なし：画像が粗くて見分けられない",
-      "enum": ["なし", "指定なし"]
+      "description": "スタンプ（配布元のロゴなどが、カードの絵の上に押されたもの）。なし：画像に見当たらない。その他のスタンプ：押されているとわかるが、どのスタンプか一覧にない、または見分けられない。指定なし：画像が粗くて見分けられない",
+      "enum": ["なし", "その他のスタンプ", "指定なし"]
     }
   }
 }

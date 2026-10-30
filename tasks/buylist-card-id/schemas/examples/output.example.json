@@ -14,7 +14,8 @@
         "hp": 160,
         "attacks": [
           "ばくれつだん"
-        ]
+        ],
+        "price_text": "¥1,800,000"
       },
       "price_jpy": 1800000,
       "identification": {
@@ -37,7 +38,8 @@
         "col": 2
       },
       "printed": {
-        "name": "レシラム"
+        "name": "レシラム",
+        "price_text": null
       },
       "price_jpy": null,
       "identification": {
