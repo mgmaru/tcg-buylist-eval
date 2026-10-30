@@ -1,63 +1,72 @@
 # 正解データ（gold.csv）の列の定義（Table Schema、ADR-0019）
 #
+# 読み手は、プログラム（gold.csv の検証）と、正解データを作る人（ADR-0032）。
+# 各列の description は、その列に何が正しい値かの定義。下書きのLLMへの作業指示（gold-draft/prompt.md）は、これをLLM向けに書き直したもの。
 # 1行が、買取表の1枚のカード。対象外のカード（ADR-0028）は行に入れず、meta.yaml に記録する。
 # 仕様の軸（edition、finish、stamp）の値の一覧は、output.schema.json の $defs だけが持つ（ADR-0030）。
-# ここでは値の一覧を書かず、採点器が output.schema.json の値と突き合わせて確かめる。
+# ここでは値の一覧を書かず、検証のときに output.schema.json の値と突き合わせる。
 
 fields:
   # 位置
   - name: row
     type: integer
     constraints: {required: true, minimum: 1}
-    description: 段（上から1始まり）
+    description: 段。上から1始まり。カードのないマス（空き、広告など）は行にしない
   - name: col
     type: integer
     constraints: {required: true, minimum: 1}
-    description: 列（左から1始まり）
+    description: 列。左から1始まり
 
   # 画像に印刷されている情報（読み取りの正解）
   - name: name
     type: string
     constraints: {required: true}
-    description: 画像に印刷されている通りのカード名
+    description: 画像に印刷されている通りのカード名。知識で補わない（画像にEXの表記がなければ、EXを付けない）
+    example: ギラティナ
   - name: hp
     type: integer
     constraints: {minimum: 0}
-    description: 画像に印刷されているHP。画像で読めなければ空
+    description: 画像に印刷されている通りのHP。画像で読めなければ空。カードの知識で埋めない
   - name: price_jpy
     type: integer
     constraints: {minimum: 0}
-    description: 買取価格（円）。画像に価格がなければ空
+    description: 画像に書かれている買取価格（円の整数）。「¥1,800,000」なら 1800000。価格がなければ空
+    example: 1800000
 
   # 特定の正解（仮のキーの要素。ADR-0026）
   - name: pack
     type: string
     constraints: {required: true}
-    description: 収録パックの商品の名前。ADR-0029 の決まりでそろえる（例：プラズマゲイル）
+    description: 収録パックの商品名から、シリーズの名前、商品の種類（「拡張パック」など）、かぎかっこを外したもの。プロモは世代の名前に「プロモ」を付ける（BWプロモなど）。型番は書かない（ADR-0029）
+    example: ブラックコレクション
   - name: number
     type: string
-    constraints: {required: true}
-    description: 印刷されている通りのカード番号。分母やプロモの記号も含める（例：055/053、001/BW-P）
+    constraints: {required: true, pattern: '^\S+$'}
+    description: カードに印刷されている通りの番号。分母やプロモの記号も含める（055/053、001/BW-P など）
+    example: 055/053
   - name: edition
     type: string
     constraints: {required: true}
-    description: 版。値は output.schema.json の $defs/edition。買取表や画像で確かめられなければ「指定なし」
+    description: 版。1ED、アンリミ、なし（1EDのない世代）、指定なし（買取表や画像で確かめられない）。推測で埋めない（ADR-0027）
+    example: 指定なし
   - name: finish
     type: string
     constraints: {required: true}
-    description: 加工。値は output.schema.json の $defs/finish
+    description: 加工。ノーマル、ミラーの種類の名前（マスターボールミラーなど）、指定なし（確かめられない）。推測で埋めない
+    example: ノーマル
   - name: stamp
     type: string
     constraints: {required: true}
-    description: スタンプ。値は output.schema.json の $defs/stamp
+    description: スタンプ。なし（確かめた結果、押されていない）、配布元などの名前、指定なし（確かめられない）。推測で埋めない
+    example: なし
 
   # 補助の情報（採点には使わない）
   - name: set_code
     type: string
-    description: 型番（例：BW7）。仮のキーには使わない
+    description: 型番（BW7 など）。仮のキーには使わない
   - name: rarity
     type: string
-    description: レアリティ（例：UR）
+    description: レアリティ（UR など）
   - name: card_id
     type: string
     description: カードDBのID。M1以降。M0では空
@@ -73,9 +82,10 @@ fields:
     description: 確認した日
   - name: sources
     type: string
-    description: 照合に使ったサイト。複数なら「;」で区切る（例：公式;遊々亭;ポケモンカードWiki）
+    constraints: {required: true, pattern: '^[^;]+(;[^;]+)+$'}
+    description: 照合に使った照合先を「;」で区切って書く。2つ以上（公式;遊々亭 など）
   - name: note
     type: string
-    description: 補足（例：画像にEXの表記なし）
+    description: 補足（画像にEXの表記なし、など）
 
 primaryKey: [row, col]

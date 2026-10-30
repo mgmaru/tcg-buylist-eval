@@ -9,7 +9,8 @@ output:
 gold:
   file: gold.csv
   schema: schemas/gold.schema.yaml
-  guideline: gold-guideline.yaml   # 正解データの作り方
+  guideline: gold-guideline.yaml   # 正解データの作り方（人への作業指示）
+  draft_prompt: gold-draft/prompt.md  # 下書きを作るLLMへの作業指示
 samples: samples/
 grader: buylist-card-id            # 採点器の名前（ADR-0017）
 pass:                              # 合格ライン（仮。設計書 8.4）
