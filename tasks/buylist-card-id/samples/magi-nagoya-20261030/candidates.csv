@@ -1,0 +1,41 @@
+row,col,name,hp,candidate_pack,candidate_number,set_code,rarity,official_attacks,official_url,wiki_check,wiki_rarity,basis,other_candidates
+1,1,ワタッコ,90,ハートゴールドコレクション,008/070,L1,R,みんなでアタック 10× / リーフガード 30,https://www.pokemon-card.com/card-search/details.php/card/25013/regu/all,一致,★,カード名とHPが一致する候補が1つ,
+1,2,ツボツボ,60,ハートゴールドコレクション,011/070,L1,R,ツボごもり / どくづき 30,https://www.pokemon-card.com/card-search/details.php/card/25019/regu/all,一致,★,カード名とHPが一致する候補が2つ。画像のワザ名「どくづき」で1つに絞った,LEGENDプロモ 067/L-P（HP60）
+1,3,ウインディ,110,ハートゴールドコレクション,014/070,L1,R,するどいキバ 50 / ほのおのたてがみ 90,https://www.pokemon-card.com/card-search/details.php/card/25025/regu/all,一致,★,カード名とHPが一致する候補が1つ,
+1,4,ヤドン,60,ハートゴールドコレクション,017/070,L1,C,きまぐれタックル 20,https://www.pokemon-card.com/card-search/details.php/card/25030/regu/all,一致,●,カード名とHPが一致する候補が2つ。画像のワザ名「きまぐれタックル」で1つに絞った,LEGENDプロモ 028/L-P（HP60）
+1,5,オクタン,80,ハートゴールドコレクション,029/070,L1,R,スイッチほう / スミばくだん 50,https://www.pokemon-card.com/card-search/details.php/card/25050/regu/all,一致,★,カード名とHPが一致する候補が1つ,
+1,6,ムチュール,30,ハートゴールドコレクション,037/070,L1,R,てんしのねがお / おふざけ,https://www.pokemon-card.com/card-search/details.php/card/25066/regu/all,一致,★,カード名とHPが一致する候補が1つ,
+1,7,ヤドキング,80,ハートゴールドコレクション,039/070,L1,R,せんりがん / ねんりき 30,https://www.pokemon-card.com/card-search/details.php/card/25070/regu/all,一致,★,カード名とHPが一致する候補が1つ,LEGENDプロモ 030/L-P（HP100）
+1,8,ソーナンス,90,ハートゴールドコレクション,041/070,L1,R,ばいがえし 20×,https://www.pokemon-card.com/card-search/details.php/card/25074/regu/all,一致,★,カード名とHPが一致する候補が2つ。画像のワザ名「ばいがえし」で1つに絞った,LEGENDプロモ 040/L-P（HP90）
+1,9,ピィ,30,ハートゴールドコレクション,049/070,L1,R,てんしのねがお / ピピピ,https://www.pokemon-card.com/card-search/details.php/card/25089/regu/all,一致,★,カード名とHPが一致する候補が1つ,
+1,10,ピクシー,80,ハートゴールドコレクション,051/070,L1,R,ようせいのきせき / ムーンインパクト 40,https://www.pokemon-card.com/card-search/details.php/card/25093/regu/all,一致,★,カード名とHPが一致する候補が1つ,
+2,1,ヨルノズク,90,ハートゴールドコレクション,059/070,L1,R,よるのめ / じんつうりき 40＋,https://www.pokemon-card.com/card-search/details.php/card/25109/regu/all,一致,★,カード名とHPが一致する候補が2つ。画像のワザ名「じんつうりき」で1つに絞った,LEGENDプロモ 026/L-P（HP90）
+2,2,キュウコン,90,ソウルシルバーコレクション,013/070,L1,R,あぶりだす / おにび 60,https://www.pokemon-card.com/card-search/details.php/card/25155/regu/all,一致,★,カード名とHPが一致する候補が1つ,
+2,3,ニョロトノ,120,ソウルシルバーコレクション,021/070,L1,R,ひっくりかえる / だいがっしょう 30×,https://www.pokemon-card.com/card-search/details.php/card/25171/regu/all,一致,★,カード名とHPが一致する候補が1つ,
+2,4,コイキング,30,ソウルシルバーコレクション,022/070,L1,C,はねる 10,https://www.pokemon-card.com/card-search/details.php/card/25173/regu/all,一致,●,カード名とHPが一致する候補が1つ,
+2,5,ギャラドス,130,ソウルシルバーコレクション,023/070,L1,R,ハイドロスプラッシュ 50 / はかいこうせん 80,https://www.pokemon-card.com/card-search/details.php/card/25174/regu/all,一致,★,カード名とHPが一致する候補が2つ。画像のワザ名「ハイドロスプラッシュ」で1つに絞った,LEGENDプロモ 004/L-P（HP130）
+2,6,マリルリ,90,ソウルシルバーコレクション,025/070,L1,R,たきのぼり 40 / バブルこうせん 60,https://www.pokemon-card.com/card-search/details.php/card/25178/regu/all,一致,★,カード名とHPが一致する候補が1つ,
+2,7,ピチュー,30,ソウルシルバーコレクション,031/070,L1,R,てんしのねがお / みんなであそぼ,https://www.pokemon-card.com/card-search/details.php/card/25189/regu/all,一致,★,カード名とHPが一致する候補が1つ,
+2,8,ピカチュウ,60,ソウルシルバーコレクション,032/070,L1,C,しっぽでたたく 10 / でんこうせっか 20＋,https://www.pokemon-card.com/card-search/details.php/card/25191/regu/all,一致,●,カード名とHPが一致する候補が1つ,LEGENDプロモ 019/L-P（HP70）
+2,9,ライチュウ,90,ソウルシルバーコレクション,033/070,L1,R,アイアンテール 30× / 10まんボルト 100,https://www.pokemon-card.com/card-search/details.php/card/25193/regu/all,一致,★,カード名とHPが一致する候補が1つ,LEGENDプロモ 044/L-P（HP100）
+2,10,ネイティオ,90,ソウルシルバーコレクション,043/070,L1,R,サイコウェーブ 20× / あやしいひかり 50,https://www.pokemon-card.com/card-search/details.php/card/25211/regu/all,一致,★,カード名とHPが一致する候補が1つ,
+3,1,ウソッキー,90,ソウルシルバーコレクション,047/070,L1,R,おしたおす 20× / じひびき 40,https://www.pokemon-card.com/card-search/details.php/card/25219/regu/all,一致,★,カード名とHPが一致する候補が1つ,
+3,2,カポエラー,60,ソウルシルバーコレクション,049/070,L1,R,トリプルキック 20× / インファイト 60,https://www.pokemon-card.com/card-search/details.php/card/25223/regu/all,一致,★,カード名とHPが一致する候補が1つ,
+3,3,グライオン,90,よみがえる伝説,032/080,L2,R,しのびのキバ 30 / どくづき 50,https://www.pokemon-card.com/card-search/details.php/card/25632/regu/all,一致,★,カード名とHPが一致する候補が1つ,
+3,4,キレイハナ,110,よみがえる伝説,004/080,L2,R,ハッスルステップ / おどりあかす 30×,https://www.pokemon-card.com/card-search/details.php/card/25579/regu/all,一致,★,カード名とHPが一致する候補が1つ,
+3,5,マグカルゴ,100,よみがえる伝説,011/080,L2,R,やきこがす 20 / ようがんりゅう 60＋,https://www.pokemon-card.com/card-search/details.php/card/25591/regu/all,一致,★,カード名とHPが一致する候補が1つ,
+3,6,イーブイ,50,よみがえる伝説,058/080,L2,C,たいあたり 10 / かみつく 20,https://www.pokemon-card.com/card-search/details.php/card/25684/regu/all,一致,●,カード名とHPが一致する候補が1つ,
+3,7,ブースター,90,よみがえる伝説,009/080,L2,U,ほのおのしっぽ 30 / かえんほうしゃ 90,https://www.pokemon-card.com/card-search/details.php/card/25587/regu/all,一致,◆,カード名とHPが一致する候補が1つ,
+3,8,シャワーズ,90,よみがえる伝説,016/080,L2,U,スパイラルドレイン 20 / デュアルスプラッシュ,https://www.pokemon-card.com/card-search/details.php/card/25601/regu/all,一致,◆,カード名とHPが一致する候補が1つ,
+3,9,サンダース,80,よみがえる伝説,017/080,L2,U,こうそくいどう 20 / マッハボルト 70,https://www.pokemon-card.com/card-search/details.php/card/25603/regu/all,一致,◆,カード名とHPが一致する候補が1つ,
+3,10,エーフィ,90,よみがえる伝説,024/080,L2,R,たいようのあんじ / サイケこうせん 30,https://www.pokemon-card.com/card-search/details.php/card/25617/regu/all,一致,★,カード名とHPが一致する候補が1つ,LEGENDプロモ 053/L-P（HP100）
+4,1,ブラッキー,90,よみがえる伝説,037/080,L2,R,つきかげのキバ 30 / クイックアタック 30＋,https://www.pokemon-card.com/card-search/details.php/card/25642/regu/all,一致,★,カード名とHPが一致する候補が1つ,LEGENDプロモ 054/L-P（HP100）
+4,2,ヘルガー,90,よみがえる伝説,043/080,L2,R,かじばのいちげき 20＋ / ダークロアー 50,https://www.pokemon-card.com/card-search/details.php/card/25653/regu/all,一致,★,カード名とHPが一致する候補が1つ,バンギラス悪 008/019（HP110）
+4,3,フォレトス,90,よみがえる伝説,046/080,L2,R,ミラーショット 30 / みんなでばくはつ 30×,https://www.pokemon-card.com/card-search/details.php/card/25660/regu/all,一致,★,カード名とHPが一致する候補が1つ,ハガネール鋼 006/019（HP80）
+4,4,ハッサム,90,よみがえる伝説,048/080,L2,R,ディレクター / いあいぎり 50 / メタルクロー 80,https://www.pokemon-card.com/card-search/details.php/card/25665/regu/all,一致,★,カード名とHPが一致する候補が1つ,ハガネール鋼 008/019（HP100）
+4,5,トゲキッス,120,よみがえる伝説,061/080,L2,R,めぐみのつばさ / エアカッター 80,https://www.pokemon-card.com/card-search/details.php/card/25689/regu/all,一致,★,カード名とHPが一致する候補が1つ,
+4,6,ドーブル,70,よみがえる伝説,062/080,L2,R,にがおえ / しっぽビンタ 20×,https://www.pokemon-card.com/card-search/details.php/card/25691/regu/all,一致,★,カード名とHPが一致する候補が1つ,
+4,7,ウツボット,110,頂上大激突,003/080,L3,R,からまるつる / ドレインアシッド 30,https://www.pokemon-card.com/card-search/details.php/card/26103/regu/all,一致,★,カード名とHPが一致する候補が1つ,
+4,8,ギャロップ,90,頂上大激突,011/080,L3,R,あついこころ / フレイムサークル 50,https://www.pokemon-card.com/card-search/details.php/card/26111/regu/all,一致,★,カード名とHPが一致する候補が1つ,
+4,9,コダック,60,頂上大激突,015/080,L3,C,ずっこけヘッド,https://www.pokemon-card.com/card-search/details.php/card/26115/regu/all,一致,●,カード名とHPが一致する候補が1つ,
+4,10,マンムー,140,頂上大激突,021/080,L3,R,こごえるかぜ 40 / ゆきあらし 70,https://www.pokemon-card.com/card-search/details.php/card/26121/regu/all,一致,★,カード名とHPが一致する候補が1つ,
