@@ -34,7 +34,7 @@ steps:
     rules: [G-01, G-02, G-09]
   - id: S-04
     actor: human
-    text: 全行について、位置・カード名・HP・価格を、画像と見比べて確かめる。各列の書き方は gold.schema.yaml の各列の説明のとおり。
+    text: 全行について、位置・カード名・HP・価格の文字（price_text）・価格（price_jpy）を、画像と見比べて確かめる。各列の書き方は gold.schema.yaml の各列の説明のとおり。
     uses: [schemas/gold.schema.yaml]
     rules: [G-01]
   - id: S-05
@@ -86,9 +86,9 @@ rules:
     see: [設計書 2.2]
   - id: G-06
     topic: 仕様
-    text: 値の一覧にない加工やスタンプ（マスターボールミラーなど）が出てきたら、先に output.schema.json の値の一覧に足し、gold-draft/prompt.md の値の一覧も直してから書く。加工は、ミラーの種類の名前まで分ける。
-    why: 値の一覧は output.schema.json だけが持つため。下書きのLLMにも、新しい値を伝える必要がある。
-    see: [ADR-0027, ADR-0030]
+    text: 加工やスタンプの値は、値の一覧（output.schema.json）から選ぶ。一覧にない種類が出てきても、その場で一覧に足さない。ノーマルではない（スタンプがある）とわかるが、種類が一覧にないときは「その他の加工」「その他のスタンプ」を使い、一覧にない種類だったことを note に書く。一覧は、加工の種類の調査で直す（直したら task.yaml の version を上げ、gold-draft/prompt.md の値の一覧も直す）。
+    why: 一覧はサンプルに合わせて変えず、調べた概念で作るため。サンプルに合わせて足すと、前の結果と比べにくくなり、答えのヒントにもなる。
+    see: [ADR-0043, ADR-0030]
   - id: G-07
     topic: 対象外
     text: パックごとの番号が印刷されていないカード（旧裏・neo、DP1〜DP5、番号のないプロモ）は、gold.csv に入れない。外したカードの位置・カード名・理由を meta.yaml に記録する。
