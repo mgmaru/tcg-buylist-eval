@@ -68,5 +68,8 @@
 | [0044](0044-schema-enforcement-is-harness-part.md) | モデルの呼び出しでのスキーマの強制は、被験ハーネスの部品とし、H0では使わない | 採用 | 2026-10-30 |
 | [0045](0045-card-name-strict-match.md) | カード名は厳密に比べ、「EX」と「ex」を同じとみなさない。表記だけの違いは診断で分ける | 採用 | 2026-10-30 |
 | [0046](0046-gold-in-candidates-diagnosis.md) | 候補（candidates）の中に正解があったかを、診断に記録する | 採用 | 2026-10-31 |
+| [0047](0047-output-reading-and-answer.md) | 出力のカードを、中身の名前で reading（読んだもの）と answer（答え）に分ける | 採用 | 2026-10-31 |
+| [0048](0048-price-null-is-withheld.md) | 価格の null は「控えた」として保留にし、誤答にしない | 採用 | 2026-10-31 |
+| [0049](0049-subject-gets-answering-instructions-only.md) | 被験エージェントには回答の仕方だけを伝え、採点の仕組みは伝えない | 採用 | 2026-10-31 |
 
 調査の結果は [docs/research/](../research/) にある。

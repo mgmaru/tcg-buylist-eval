@@ -17,7 +17,7 @@ fields:
     constraints: {required: true, minimum: 1}
     description: 列。左から1始まり
 
-  # 画像に印刷されている情報（読み取りの正解）
+  # 出力の reading（画像から読んだもの）の正解。診断に使う（ADR-0047）
   - name: name
     type: string
     constraints: {required: true}
@@ -31,13 +31,15 @@ fields:
     type: string
     description: 画像に書かれている通りの買取価格の文字（「1.5万円」など）。価格がなければ空。price_jpy が空のときだけ空にする（ADR-0040）
     example: 1.5万円
+
+  # 出力の answer（答え）の正解。成績に使う（ADR-0039、ADR-0047）
   - name: price_jpy
     type: integer
     constraints: {minimum: 0}
     description: 画像に書かれている買取価格（円の整数）。「¥1,800,000」なら 1800000、「1.5万円」なら 15000。価格がなければ空
     example: 1800000
 
-  # 特定の正解（仮のキーの要素。ADR-0026）
+  # 何のカードか（仮のキーの要素。ADR-0026）
   - name: pack
     type: string
     constraints: {required: true}

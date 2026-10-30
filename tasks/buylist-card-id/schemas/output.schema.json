@@ -5,72 +5,141 @@
   "description": "買取表の画像に掲載されているカードの一覧",
   "type": "object",
   "additionalProperties": false,
-  "required": ["grid", "cards"],
+  "required": [
+    "grid",
+    "cards"
+  ],
   "properties": {
     "grid": {
       "description": "格子の段の数と列の数",
       "type": "object",
       "additionalProperties": false,
-      "required": ["rows", "cols"],
+      "required": [
+        "rows",
+        "cols"
+      ],
       "properties": {
-        "rows": {"type": "integer", "minimum": 1},
-        "cols": {"type": "integer", "minimum": 1}
+        "rows": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "cols": {
+          "type": "integer",
+          "minimum": 1
+        }
       }
     },
     "cards": {
       "description": "掲載カードの一覧。カードのないマスは含めない",
       "type": "array",
-      "items": {"$ref": "#/$defs/card"}
+      "items": {
+        "$ref": "#/$defs/card"
+      }
     }
   },
   "$defs": {
     "card": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["position", "printed", "price_jpy", "identification"],
+      "required": [
+        "position",
+        "reading",
+        "answer"
+      ],
       "properties": {
         "position": {
           "description": "上から1始まりの段、左から1始まりの列",
           "type": "object",
           "additionalProperties": false,
-          "required": ["row", "col"],
+          "required": [
+            "row",
+            "col"
+          ],
           "properties": {
-            "row": {"type": "integer", "minimum": 1},
-            "col": {"type": "integer", "minimum": 1}
+            "row": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "col": {
+              "type": "integer",
+              "minimum": 1
+            }
           }
         },
-        "printed": {
-          "description": "画像から読み取った内容。知識で補わない",
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["name", "price_text"],
-          "properties": {
-            "name": {"type": "string", "minLength": 1, "description": "画像に印刷されている通りのカード名"},
-            "price_text": {"type": ["string", "null"], "minLength": 1, "description": "画像に書かれている通りの買取価格の文字（例：1.5万円）。価格が書かれていない、または読み取れないときは null"},
-            "hp": {"type": "integer", "minimum": 0, "description": "読み取れなければ書かない"},
-            "attacks": {"type": "array", "items": {"type": "string", "minLength": 1}, "description": "読み取れたワザ名"}
-          }
+        "reading": {
+          "$ref": "#/$defs/reading"
+        },
+        "answer": {
+          "$ref": "#/$defs/answer"
+        }
+      }
+    },
+    "reading": {
+      "description": "画像から読み取った内容。画像に書かれている通りに書き、知識で補わない",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "price_text"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "画像に印刷されている通りのカード名"
+        },
+        "hp": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "読み取れなければ書かない"
+        },
+        "attacks": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "読み取れたワザ名"
+        },
+        "price_text": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "description": "画像に書かれている通りの買取価格の文字（例：1.5万円）。価格が書かれていない、または読み取れないときは null"
+        }
+      }
+    },
+    "answer": {
+      "description": "このカードについての答え",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "price_jpy"
+      ],
+      "properties": {
+        "status": {
+          "$ref": "#/$defs/status"
+        },
+        "card": {
+          "$ref": "#/$defs/card_ref"
         },
         "price_jpy": {
           "description": "買取価格（円の整数）。画像に価格が書かれていない、または読み取れないときは null",
-          "type": ["integer", "null"],
+          "type": [
+            "integer",
+            "null"
+          ],
           "minimum": 0
         },
-        "identification": {"$ref": "#/$defs/identification"}
-      }
-    },
-    "identification": {
-      "description": "どのカードかを特定した結果",
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["status"],
-      "properties": {
-        "status": {"$ref": "#/$defs/status"},
-        "card": {"$ref": "#/$defs/card_ref"},
         "candidates": {
-          "description": "不明のときの候補",
+          "description": "どのカードか特定できないときの候補",
           "type": "array",
-          "items": {"$ref": "#/$defs/card_ref"}
+          "items": {
+            "$ref": "#/$defs/card_ref"
+          }
         },
         "confidence": {
           "description": "0〜1の確信度",
@@ -79,47 +148,103 @@
           "maximum": 1
         }
       },
-      "if": {"properties": {"status": {"const": "identified"}}},
-      "then": {"required": ["card"]},
-      "else": {"not": {"required": ["card"]}}
+      "if": {
+        "properties": {
+          "status": {
+            "const": "identified"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "card"
+        ]
+      },
+      "else": {
+        "not": {
+          "required": [
+            "card"
+          ]
+        }
+      }
     },
     "card_ref": {
-      "description": "カードを指すもの。収録パック・番号・仕様の組",
+      "description": "どのカードかを表すもの。収録パック・番号・仕様の組",
       "type": "object",
       "additionalProperties": false,
-      "required": ["pack", "number", "variant"],
+      "required": [
+        "pack",
+        "number",
+        "variant"
+      ],
       "properties": {
-        "pack": {"type": "string", "minLength": 1, "description": "収録パックの商品の名前。型番ではない"},
-        "number": {"type": "string", "minLength": 1, "description": "印刷されている通りのカード番号。分母やプロモの記号も含める"},
-        "variant": {"$ref": "#/$defs/variant"}
+        "pack": {
+          "type": "string",
+          "minLength": 1,
+          "description": "収録パックの商品の名前。型番ではない"
+        },
+        "number": {
+          "type": "string",
+          "minLength": 1,
+          "description": "印刷されている通りのカード番号。分母やプロモの記号も含める"
+        },
+        "variant": {
+          "$ref": "#/$defs/variant"
+        }
       }
     },
     "variant": {
       "description": "仕様。軸ごとに1つの値。確かめられない軸は「指定なし」",
       "type": "object",
       "additionalProperties": false,
-      "required": ["edition", "finish", "stamp"],
+      "required": [
+        "edition",
+        "finish",
+        "stamp"
+      ],
       "properties": {
-        "edition": {"$ref": "#/$defs/edition"},
-        "finish": {"$ref": "#/$defs/finish"},
-        "stamp": {"$ref": "#/$defs/stamp"}
+        "edition": {
+          "$ref": "#/$defs/edition"
+        },
+        "finish": {
+          "$ref": "#/$defs/finish"
+        },
+        "stamp": {
+          "$ref": "#/$defs/stamp"
+        }
       }
     },
     "status": {
-      "description": "identified：特定した。unknown：不明",
-      "enum": ["identified", "unknown"]
+      "description": "identified：どのカードか特定した。unknown：特定できない",
+      "enum": [
+        "identified",
+        "unknown"
+      ]
     },
     "edition": {
       "description": "版。なし：1EDのない世代。指定なし：確かめられない",
-      "enum": ["1ED", "アンリミ", "なし", "指定なし"]
+      "enum": [
+        "1ED",
+        "アンリミ",
+        "なし",
+        "指定なし"
+      ]
     },
     "finish": {
       "description": "加工。その他の加工：ノーマルではないとわかるが、種類が一覧にない、または見分けられない。指定なし：確かめられない",
-      "enum": ["ノーマル", "その他の加工", "指定なし"]
+      "enum": [
+        "ノーマル",
+        "その他の加工",
+        "指定なし"
+      ]
     },
     "stamp": {
       "description": "スタンプ（配布元のロゴなどが、カードの絵の上に押されたもの）。なし：画像に見当たらない。その他のスタンプ：押されているとわかるが、どのスタンプか一覧にない、または見分けられない。指定なし：画像が粗くて見分けられない",
-      "enum": ["なし", "その他のスタンプ", "指定なし"]
+      "enum": [
+        "なし",
+        "その他のスタンプ",
+        "指定なし"
+      ]
     }
   }
 }

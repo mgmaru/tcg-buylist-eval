@@ -41,15 +41,15 @@ rules:
     topic: 読み取り
     text: 価格は、画像に書かれている通りの文字（price_text）と、それを円の整数にしたもの（price_jpy）の両方を出す。価格が書かれていない、または読み取れないときは、どちらも null にする。
     examples:
-      - {printed: "¥1,800,000", price_text: "¥1,800,000", price_jpy: 1800000}
-      - {printed: "1.5万円", price_text: "1.5万円", price_jpy: 15000}
-      - {printed: "17万円", price_text: "17万円", price_jpy: 170000}
+      - {image: "¥1,800,000", price_text: "¥1,800,000", price_jpy: 1800000}
+      - {image: "1.5万円", price_text: "1.5万円", price_jpy: 15000}
+      - {image: "17万円", price_text: "17万円", price_jpy: 170000}
     see: [ADR-0040]
   - id: R-04
     topic: 読み取り
     text: カード名は、画像に印刷されている通りに出す。知識で補わない。
     examples:
-      - {printed: "ギラティナ", output: "ギラティナ", note: "画像にEXの表記がなければ、EXを付けない"}
+      - {image: "ギラティナ", output: "ギラティナ", note: "画像にEXの表記がなければ、EXを付けない"}
   - id: R-05
     topic: 読み取り
     text: HPとワザ名は、画像から読み取れる範囲で出す。読み取れないものは出さない。

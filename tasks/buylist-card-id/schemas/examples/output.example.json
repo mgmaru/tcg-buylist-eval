@@ -9,7 +9,7 @@
         "row": 1,
         "col": 1
       },
-      "printed": {
+      "reading": {
         "name": "リザードン",
         "hp": 160,
         "attacks": [
@@ -17,8 +17,7 @@
         ],
         "price_text": "¥1,800,000"
       },
-      "price_jpy": 1800000,
-      "identification": {
+      "answer": {
         "status": "identified",
         "card": {
           "pack": "プラズマゲイル",
@@ -29,6 +28,7 @@
             "stamp": "なし"
           }
         },
+        "price_jpy": 1800000,
         "confidence": 0.9
       }
     },
@@ -37,13 +37,13 @@
         "row": 1,
         "col": 2
       },
-      "printed": {
+      "reading": {
         "name": "レシラム",
         "price_text": null
       },
-      "price_jpy": null,
-      "identification": {
+      "answer": {
         "status": "unknown",
+        "price_jpy": null,
         "candidates": [
           {
             "pack": "ブラックコレクション",
