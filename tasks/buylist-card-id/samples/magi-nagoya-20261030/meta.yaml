@@ -13,7 +13,7 @@ era: [LEGEND]
 gold_version: 1
 draft:
   model: claude-opus-5-5
-  via: Claude Code
+  via: Claude Code（サブエージェント。gold-draft/prompt.md と画像だけを渡した）
   at: 2026-10-30
 excluded: []
 history: []
