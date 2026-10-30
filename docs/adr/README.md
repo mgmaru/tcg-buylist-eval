@@ -55,5 +55,7 @@
 | [0031](0031-schema-kind-and-file-format.md) | スキーマの種類はデータの形に、ファイルの書き方は読み手に合わせる | 採用 | 2026-10-29 |
 | [0032](0032-separate-files-by-reader.md) | ファイルは誰のための作業指示かで分け、LLMへの作業指示には、LLMの作業に必要なことだけを書く | 採用 | 2026-10-30 |
 | [0033](0033-grading-by-grader-not-langfuse.md) | 採点は採点器が行い、LLMは使わない。Langfuseは採点の結果とトレースを受け取る（0007の一部を明確にする） | 採用 | 2026-10-30 |
+| [0034](0034-sample-id-naming.md) | サンプルIDは「店舗-地域-YYYYMMDD」にする | 採用 | 2026-10-30 |
+| [0035](0035-sample-meta.md) | サンプルのメタ情報（meta.yaml）の項目と、そのスキーマ | 採用 | 2026-10-30 |
 
 調査の結果は [docs/research/](../research/) にある。

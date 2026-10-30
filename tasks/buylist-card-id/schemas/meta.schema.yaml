@@ -1,0 +1,94 @@
+# サンプルのメタ情報（samples/<サンプルID>/meta.yaml）のスキーマ（JSON Schema、ADR-0035）
+# 読み手は、プログラム（meta.yaml の検証）と、meta.yaml を書く人。
+$schema: https://json-schema.org/draft/2020-12/schema
+title: サンプルのメタ情報
+type: object
+additionalProperties: false
+required: [sample_id, source, layout, card_count, era, gold_version, draft, excluded, history]
+properties:
+  sample_id:
+    description: サンプルID。フォルダ名と同じ。<店舗>-<地域>-<YYYYMMDD>（ADR-0034）
+    type: string
+    pattern: '^[a-z0-9]+(-[a-z0-9]+)*-[0-9]{8}(-[0-9]+)?$'
+  source:
+    type: object
+    additionalProperties: false
+    required: [url, shop, updated_at, updated_at_from, collected_at]
+    properties:
+      url:
+        description: 出典のURL。追跡用の部分（? から後ろ）は外す
+        type: string
+        pattern: '^https://[^?#]+$'
+      shop:
+        description: 店舗の名前
+        type: string
+        minLength: 1
+      updated_at:
+        description: 買取表に書かれた更新日。書かれていなければ投稿日
+        type: string
+        format: date
+      updated_at_from:
+        description: updated_at をどこから取ったか。buylist：買取表、post：投稿日
+        enum: [buylist, post]
+      collected_at:
+        description: 画像を保存した日
+        type: string
+        format: date
+  layout:
+    type: object
+    additionalProperties: false
+    required: [rows, cols]
+    properties:
+      rows: {type: integer, minimum: 1, description: 段の数}
+      cols: {type: integer, minimum: 1, description: 列の数}
+  card_count:
+    description: 買取表に載っているカードの枚数（外したカードも含む）
+    type: integer
+    minimum: 1
+  era:
+    description: 載っているカードの世代（分析用）
+    type: array
+    minItems: 1
+    items: {type: string, minLength: 1}
+  split:
+    description: dev または test。M0では使わない
+    enum: [dev, test]
+  gold_version:
+    description: 正解データの版。1から始める
+    type: integer
+    minimum: 1
+  draft:
+    description: 正解データの下書き（gold-guideline.yaml の G-02）
+    type: object
+    additionalProperties: false
+    required: [model, via, at]
+    properties:
+      model: {type: string, minLength: 1, description: 下書きに使ったモデル（名前と版）}
+      via: {type: string, minLength: 1, description: 使った手段（API、Claude Code など）}
+      at: {type: string, format: date, description: 下書きを作った日}
+  excluded:
+    description: gold.csv から外したカード（G-04、G-07）
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      required: [row, col, name, reason]
+      properties:
+        row: {type: integer, minimum: 1}
+        col: {type: integer, minimum: 1}
+        name: {type: string, minLength: 1}
+        reason:
+          description: no_pack_number：パックごとの番号がない。unresolved：特定を確定できない
+          enum: [no_pack_number, unresolved]
+        note: {type: string}
+  history:
+    description: 確定したあとで gold.csv を直した記録（G-08）
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      required: [version, date, change]
+      properties:
+        version: {type: integer, minimum: 2, description: 直したあとの gold_version}
+        date: {type: string, format: date}
+        change: {type: string, minLength: 1}

@@ -30,7 +30,7 @@ fields:
   - name: price_jpy
     type: integer
     constraints: {minimum: 0}
-    description: 画像に書かれている買取価格（円の整数）。「¥1,800,000」なら 1800000。価格がなければ空
+    description: 画像に書かれている買取価格（円の整数）。「¥1,800,000」なら 1800000、「1.5万円」なら 15000。価格がなければ空
     example: 1800000
 
   # 特定の正解（仮のキーの要素。ADR-0026）
