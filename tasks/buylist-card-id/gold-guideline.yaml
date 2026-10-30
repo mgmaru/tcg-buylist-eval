@@ -24,8 +24,9 @@ steps:
     rules: [G-07]
   - id: S-02
     actor: human
-    text: samples/<サンプルのID>/ を作り、画像を input.jpg として置く。meta.yaml に出典・店舗・更新日・収集日・段と列・枚数・世代を書き、gold_version を 1 にする。
-    see: [設計書 5.1]
+    text: samples/<サンプルID>/ を作り、画像を input.jpg として置く。サンプルIDは <店舗>-<地域>-<YYYYMMDD>（日付は買取表の更新日、なければ投稿日）。meta.yaml を schemas/meta.schema.yaml に沿って書き、gold_version を 1 にする。出典のURLは、追跡用の部分（? から後ろ）を外して書く。
+    uses: [schemas/meta.schema.yaml]
+    see: [ADR-0034, ADR-0035, 設計書 5.1]
   - id: S-03
     actor: llm
     text: 画像と gold-draft/prompt.md を下書きのLLMに渡し、gold.csv の下書きを作らせる。使ったモデル（名前と版）を meta.yaml に記録する。

@@ -1,0 +1,19 @@
+sample_id: magi-nagoya-20261030
+source:
+  url: https://x.com/magiNagoya/status/2116010662120059279
+  shop: magi 名古屋駅前店
+  updated_at: 2026-10-30
+  updated_at_from: post            # 買取表に更新日が書かれていないため、投稿日
+  collected_at: 2026-10-30
+layout:
+  rows: 4
+  cols: 10
+card_count: 40
+era: [LEGEND]
+gold_version: 1
+draft:
+  model: claude-opus-5-5
+  via: Claude Code
+  at: 2026-10-30
+excluded: []
+history: []
