@@ -67,5 +67,6 @@
 | [0043](0043-vocabulary-from-concepts.md) | 語彙の値の一覧は、調べた概念の一覧と「その他」で作る（0027の一部を置き換え） | 採用 | 2026-10-30 |
 | [0044](0044-schema-enforcement-is-harness-part.md) | モデルの呼び出しでのスキーマの強制は、被験ハーネスの部品とし、H0では使わない | 採用 | 2026-10-30 |
 | [0045](0045-card-name-strict-match.md) | カード名は厳密に比べ、「EX」と「ex」を同じとみなさない。表記だけの違いは診断で分ける | 採用 | 2026-10-30 |
+| [0046](0046-gold-in-candidates-diagnosis.md) | 候補（candidates）の中に正解があったかを、診断に記録する | 採用 | 2026-10-31 |
 
 調査の結果は [docs/research/](../research/) にある。
