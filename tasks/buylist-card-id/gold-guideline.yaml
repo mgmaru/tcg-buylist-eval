@@ -1,0 +1,105 @@
+# 正解データ（gold.csv）の作り方：人への作業指示（ADR-0032）
+#
+# 読み手は、正解データを作る人だけ。LLMには渡さない。
+#   - 下書きを作るLLMへの作業指示は gold-draft/prompt.md（中身をそのまま渡す）
+#   - 各列に何が正しい値かの定義と、機械で確かめる制約は schemas/gold.schema.yaml
+# 被験エージェントには、このファイルも gold-draft/prompt.md も渡さない。正解の作り方が漏れると、評価が成り立たなくなる。
+#
+# 番号（S-NN、G-NN）は、一度付けたら変えない。やめるときは欠番にする。
+# gold.csv の note には、値を決めた根拠として決まりの番号を書いてよい（例：G-04により外した）。
+#
+# actor：その手順を誰が行うか。
+#   human：人
+#   llm：下書きを作るLLM（人が動かす）
+#   tool：確認の道具（道具ができるまでは人が行う）
+
+id: buylist-card-id
+version: 1
+
+# 作業の流れ（設計書 10.1）
+steps:
+  - id: S-01
+    actor: human
+    text: 買取表の画像を選ぶ。パックごとの番号が印刷されたカードが中心のものにする。
+    rules: [G-07]
+  - id: S-02
+    actor: human
+    text: samples/<サンプルのID>/ を作り、画像を input.jpg として置く。meta.yaml に出典・店舗・更新日・収集日・段と列・枚数・世代を書き、gold_version を 1 にする。
+    see: [設計書 5.1]
+  - id: S-03
+    actor: llm
+    text: 画像と gold-draft/prompt.md を下書きのLLMに渡し、gold.csv の下書きを作らせる。使ったモデル（名前と版）を meta.yaml に記録する。
+    uses: [gold-draft/prompt.md]
+    rules: [G-01, G-02, G-09]
+  - id: S-04
+    actor: human
+    text: 全行について、位置・カード名・HP・価格を、画像と見比べて確かめる。各列の書き方は gold.schema.yaml の各列の説明のとおり。
+    uses: [schemas/gold.schema.yaml]
+    rules: [G-01]
+  - id: S-05
+    actor: human
+    text: 全行について、パック・番号・仕様（版・加工・スタンプ）を、照合先で確かめる。下書きで要確認とされた行は、特に確かめる。
+    uses: [schemas/gold.schema.yaml]
+    rules: [G-03, G-04, G-05, G-06]
+  - id: S-06
+    actor: human
+    text: 対象外のカードと、特定を確定できないカードを gold.csv から外し、meta.yaml に記録する。
+    rules: [G-04, G-07]
+  - id: S-07
+    actor: human
+    text: 全行の verified_by・verified_at・sources を埋めて確定する。note に残った下書きの「要確認」は、消すか、確かめた結果に書き換える。
+  - id: S-08
+    actor: tool
+    text: gold.csv が gold.schema.yaml（列・型・制約）と、仕様の値の一覧（output.schema.json）に合っているかを確かめる。
+    uses: [schemas/gold.schema.yaml, schemas/output.schema.json]
+  - id: S-09
+    actor: human
+    text: 確定したあとで gold.csv を直したら、gold_version を上げ、何を直したかを meta.yaml に記録する。
+    rules: [G-08]
+
+# 人が確かめるときの決まり
+rules:
+  - id: G-01
+    topic: 下書き
+    text: 下書きをそのまま正解にしない。全行を人が確かめる。下書きで迷いがなかった行も確かめる。
+    why: 正解データはモデルの成績を測る物差しで、モデルの出力をそのまま物差しにすると、測る意味がなくなるため。下書きの誤りがそのまま残るのも防ぐ。
+    see: [設計書 10.2]
+  - id: G-02
+    topic: 下書き
+    text: 下書きに使ったモデル（名前と版）を、meta.yaml に記録する。
+    why: Claude は被験モデルでもある。下書きに使ったモデルに有利な偏りが入っていないかを、あとで確かめられるようにするため。
+    see: [設計書 10.2]
+  - id: G-03
+    topic: 照合
+    text: パック・番号は、2つ以上の照合先で突き合わせて確かめ、使った照合先を sources に「;」で区切って書く。照合先は、公式のカード検索、ショップ（遊々亭、カードラッシュなど）、ポケモンカードWiki など。
+    why: 照合先ごとに、載っていないカードや誤りがある（公式にはBW期のシークレットレアがない、など）。1つだけでは抜けや誤りに気づけないため。
+    see: [ADR-0026, docs/research/card-data-sources.md]
+  - id: G-04
+    topic: 照合
+    text: 照合先の間で食い違ったら、画像に印刷されている内容（HP、ワザ、レアリティのマーク、番号）と突き合わせて決める。それでも決められなければ、そのカードを gold.csv から外し、meta.yaml に記録する。
+    why: 正解データは物差しなので、確かでない値を入れないため。
+  - id: G-05
+    topic: 照合
+    text: 同じ名前のカード（レシラム3種など）と、型番と番号が重なるカード（BW1の055/053など）は、HP・ワザ・レアリティで、どのパックのカードかを特に確かめる。
+    why: モデルが取り違えやすく、正解データの側でも取り違えやすいため。
+    see: [設計書 2.2]
+  - id: G-06
+    topic: 仕様
+    text: 値の一覧にない加工やスタンプ（マスターボールミラーなど）が出てきたら、先に output.schema.json の値の一覧に足し、gold-draft/prompt.md の値の一覧も直してから書く。加工は、ミラーの種類の名前まで分ける。
+    why: 値の一覧は output.schema.json だけが持つため。下書きのLLMにも、新しい値を伝える必要がある。
+    see: [ADR-0027, ADR-0030]
+  - id: G-07
+    topic: 対象外
+    text: パックごとの番号が印刷されていないカード（旧裏・neo、DP1〜DP5、番号のないプロモ）は、gold.csv に入れない。外したカードの位置・カード名・理由を meta.yaml に記録する。
+    why: 仮のキーで表せないカードで採点しないため。外したことを記録して、成績の母数が変わったことを追えるようにする。
+    see: [ADR-0028]
+  - id: G-08
+    topic: 修正
+    text: 確定したあとで gold.csv を直したら、meta.yaml の gold_version を1つ上げ、何を直したかを記録する。
+    why: 直す前と後の採点の結果を、取り違えて比べないようにするため。
+    see: [設計書 10.2]
+  - id: G-09
+    topic: 下書きのプロンプト
+    text: gold-draft/prompt.md を直すときは、gold.schema.yaml の各列の説明と食い違いがないかを確かめる。人の作業や出典は、プロンプトに書かない。
+    why: 各列の正しい値の定義は gold.schema.yaml が持ち、プロンプトはそれをLLM向けに書き直したものだから。人向けの情報は、LLMのコンテキストを埋め、判断を迷わせる。
+    see: [ADR-0032]

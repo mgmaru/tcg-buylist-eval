@@ -204,8 +204,13 @@ Langfuseは記録・採点・比較・観測を受け持つ。環境の準備・
 - [x] 🤖 `tasks/buylist-card-id/schemas/gold.schema.yaml`：正解データの列の定義を、Table Schemaに沿ったYAMLで書く（5.2、ADR-0019）
   - [x] 👤 PRでレビューする（2026-10-29、ADR-0031）
 - [x] 🤖 `tasks/buylist-card-id/task.yaml`：タスクの目録を作る（ADR-0016）
-- [ ] 🤝 `docs/gold-guideline.md`：正解データの作成ルールを書く（10.2）
+- [x] 🤝 正解データの作り方を、読み手ごとに分けて書く（10.2、ADR-0032）
+  - `tasks/buylist-card-id/gold-guideline.yaml`：人への作業指示（手順 S-NN と決まり G-NN）
+  - `tasks/buylist-card-id/gold-draft/prompt.md`：下書きを作るLLMへの作業指示
+  - `tasks/buylist-card-id/schemas/gold.schema.yaml`：各列の定義と、機械で確かめる制約
   - 全行を確認する／下書きに使ったモデルを記録する／印刷名は画像通り／直したら `gold_version` を上げる
+  - ADR-0026〜0029の「`docs/gold-guideline.md`」は、このファイルのこと
+  - [x] 👤 PRでレビューする（2026-10-30）
 
 ## 8. タスクセット（正解データ）の作成
 

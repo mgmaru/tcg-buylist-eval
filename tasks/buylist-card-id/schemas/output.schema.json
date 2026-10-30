@@ -2,13 +2,13 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/mgmaru/tcg-buylist-eval/tasks/buylist-card-id/schemas/output.schema.json",
   "title": "買取表のカード同定：被験エージェントの出力",
-  "description": "掲載カードの一覧。決まりは spec.yaml（R-01〜R-12）。値の一覧（$defs）は、このファイルだけが持つ（ADR-0030）。",
+  "description": "買取表の画像に掲載されているカードの一覧",
   "type": "object",
   "additionalProperties": false,
   "required": ["grid", "cards"],
   "properties": {
     "grid": {
-      "description": "格子の段の数と列の数（R-02）",
+      "description": "格子の段の数と列の数",
       "type": "object",
       "additionalProperties": false,
       "required": ["rows", "cols"],
@@ -18,7 +18,7 @@
       }
     },
     "cards": {
-      "description": "掲載カードの一覧。カードのないマスは含めない（R-02）",
+      "description": "掲載カードの一覧。カードのないマスは含めない",
       "type": "array",
       "items": {"$ref": "#/$defs/card"}
     }
@@ -30,7 +30,7 @@
       "required": ["position", "printed", "price_jpy", "identification"],
       "properties": {
         "position": {
-          "description": "上から1始まりの段、左から1始まりの列（R-01）",
+          "description": "上から1始まりの段、左から1始まりの列",
           "type": "object",
           "additionalProperties": false,
           "required": ["row", "col"],
@@ -40,7 +40,7 @@
           }
         },
         "printed": {
-          "description": "画像から読み取った内容。知識で補わない（R-04、R-05）",
+          "description": "画像から読み取った内容。知識で補わない",
           "type": "object",
           "additionalProperties": false,
           "required": ["name"],
@@ -51,7 +51,7 @@
           }
         },
         "price_jpy": {
-          "description": "買取価格（円の整数）。画像に価格が書かれていない、または読み取れないときは null（R-03）",
+          "description": "買取価格（円の整数）。画像に価格が書かれていない、または読み取れないときは null",
           "type": ["integer", "null"],
           "minimum": 0
         },
@@ -59,7 +59,7 @@
       }
     },
     "identification": {
-      "description": "特定の結果（R-06〜R-11）",
+      "description": "どのカードかを特定した結果",
       "type": "object",
       "additionalProperties": false,
       "required": ["status"],
@@ -67,12 +67,12 @@
         "status": {"$ref": "#/$defs/status"},
         "card": {"$ref": "#/$defs/card_ref"},
         "candidates": {
-          "description": "不明のときの候補（R-11）",
+          "description": "不明のときの候補",
           "type": "array",
           "items": {"$ref": "#/$defs/card_ref"}
         },
         "confidence": {
-          "description": "0〜1の自己申告の確信度。分析用で、採点には使わない",
+          "description": "0〜1の確信度",
           "type": "number",
           "minimum": 0,
           "maximum": 1
@@ -83,18 +83,18 @@
       "else": {"not": {"required": ["card"]}}
     },
     "card_ref": {
-      "description": "カードを指すもの。M0では仮のキーの要素（ADR-0026）。M1でカードDBができたら card_id を足す",
+      "description": "カードを指すもの。収録パック・番号・仕様の組",
       "type": "object",
       "additionalProperties": false,
       "required": ["pack", "number", "variant"],
       "properties": {
-        "pack": {"type": "string", "minLength": 1, "description": "収録パックの商品の名前。型番ではない（R-08、ADR-0029）"},
-        "number": {"type": "string", "minLength": 1, "description": "印刷されている通りのカード番号。分母やプロモの記号も含める（R-07）"},
+        "pack": {"type": "string", "minLength": 1, "description": "収録パックの商品の名前。型番ではない"},
+        "number": {"type": "string", "minLength": 1, "description": "印刷されている通りのカード番号。分母やプロモの記号も含める"},
         "variant": {"$ref": "#/$defs/variant"}
       }
     },
     "variant": {
-      "description": "仕様。軸ごとに1つの値。確かめられない軸は「指定なし」（R-09、ADR-0027）",
+      "description": "仕様。軸ごとに1つの値。確かめられない軸は「指定なし」",
       "type": "object",
       "additionalProperties": false,
       "required": ["edition", "finish", "stamp"],
@@ -105,7 +105,7 @@
       }
     },
     "status": {
-      "description": "identified：特定した。unknown：不明（R-10）",
+      "description": "identified：特定した。unknown：不明",
       "enum": ["identified", "unknown"]
     },
     "edition": {
@@ -113,11 +113,11 @@
       "enum": ["1ED", "アンリミ", "なし", "指定なし"]
     },
     "finish": {
-      "description": "加工。ミラーは種類の名前で持つ。値は題材に出てきたものから足す（ADR-0027）",
+      "description": "加工。指定なし：確かめられない",
       "enum": ["ノーマル", "指定なし"]
     },
     "stamp": {
-      "description": "スタンプ。値は題材に出てきたものから足す（ADR-0027）",
+      "description": "スタンプ。なし：押されていない。指定なし：確かめられない",
       "enum": ["なし", "指定なし"]
     }
   }
