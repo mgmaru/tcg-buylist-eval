@@ -42,7 +42,7 @@ M0では、カードDB・検索ツール・H1〜H3・dev/test分割には手を�
 
 ### 1.2 評価用のツール
 
-Langfuseは記録・採点・比較・観測を受け持つ。環境の準備・リセットとエージェントの自動実行は、別の仕組みで行う（ADR-0007）。
+Langfuseは、採点の結果とトレースの記録・比較・観測を受け持つ。採点そのものは採点器（Go）が行い、LLMは使わない（ADR-0033）。環境の準備・リセットとエージェントの自動実行は、別の仕組みで行う（ADR-0007）。
 
 - [x] 🤝 環境の準備・リセットとエージェントの自動実行：**M0は自作の実行スクリプト**。M2の前にInspect AIへの移行を見直す（ADR-0008）
   - 調査：[docs/research/execution-frameworks.md](docs/research/execution-frameworks.md)
@@ -174,7 +174,7 @@ Langfuseは記録・採点・比較・観測を受け持つ。環境の準備・
 
 ### Langfuse（採点器とCSVの出力ができてから着手する）
 
-- [ ] 🤖 LangfuseのサーバーをTerraformとdocker composeで定義する：EC2 1台、添付は自分のS3（ADR-0010）
+- [ ] 🤖 LangfuseのサーバーをTerraformとdocker composeで定義する：EC2 1台、添付は自分のS3（ADR-0010）。LLMによる採点の機能は設定しない（ADR-0033）
   - データ用のEBSは別に作り、削除防止を付ける。`docker compose down -v` は使わない。ログのローテーションを設定する
 - [ ] 🤖 起動・停止をコマンド1つで行えるようにし、手順をREADMEに書く（ADR-0010）
 - [ ] 🤖 データ用のディスクのバックアップ（EBSのスナップショット）を定義する（ADR-0010）
