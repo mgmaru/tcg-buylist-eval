@@ -4,7 +4,7 @@
 
 リポジトリ名：`tcg-buylist-eval`（buylist はTCG業界で「買取表」を指す一般的な呼び方）
 
-関連ドキュメント：`model-and-harness.md`（モデルとハーネス）、`harness-design-and-evaluation.md`（ハーネス設計と評価）
+関連ドキュメント：`model-and-harness.md`（モデルとハーネス）、`harness-design-and-evaluation.md`（ハーネス設計と評価）、`agent-harness-design-notes.md`（手順の強制の強さ、LLMとハーネスの貢献の切り分け、ツール呼び出し）
 
 ---
 
