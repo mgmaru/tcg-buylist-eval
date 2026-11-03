@@ -17,7 +17,7 @@ fields:
     constraints: {required: true, minimum: 1}
     description: 列。左から1始まり
 
-  # 出力の reading（画像から読んだもの）の正解。診断に使う（ADR-0047）
+  # 出力の reading（画像から読んだもの）の正解。対応付けと診断に使う（ADR-0047、ADR-0052）
   - name: name
     type: string
     constraints: {required: true}
@@ -38,6 +38,11 @@ fields:
     constraints: {minimum: 0}
     description: 画像に書かれている買取価格（円の整数）。「¥1,800,000」なら 1800000、「1.5万円」なら 15000。価格がなければ空
     example: 1800000
+  - name: card_name
+    type: string
+    constraints: {required: true}
+    description: 特定したカードの正式な名前。そのカードに印刷されている名前で、画像で読めなかった部分（EXなど）も補う。カタカナは全角で書き、余計な空白を入れない（出力の答えの名前と、文字どおりに比べるため）。照合先で確かめる。画像に印刷されている通りの名前（name）とは別の列で、出力の answer.card.name の正解（ADR-0056、ADR-0057）
+    example: ツボツボ
 
   # 何のカードか（仮のキーの要素。ADR-0026）
   - name: pack

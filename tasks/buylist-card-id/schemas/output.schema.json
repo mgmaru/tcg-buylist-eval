@@ -169,15 +169,21 @@
       }
     },
     "card_ref": {
-      "description": "どのカードかを表すもの。収録パック・番号・仕様の組",
+      "description": "どのカードかを表すもの。カードの名前・収録パック・番号・仕様の組",
       "type": "object",
       "additionalProperties": false,
       "required": [
+        "name",
         "pack",
         "number",
         "variant"
       ],
       "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "特定したカードの正式な名前。そのカードに印刷されている名前を書く。画像で読めなかった部分（EXなど）も、知識で補って書く。カタカナは全角で書き、余計な空白を入れない"
+        },
         "pack": {
           "type": "string",
           "minLength": 1,
