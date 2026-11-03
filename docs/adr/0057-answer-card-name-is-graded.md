@@ -3,7 +3,8 @@
 - ステータス：採用
 - 日付：2026-11-04（名前の比べ方を、2026-11-03 の「全角・半角や空白だけの違いは同じとみなす」から、文字どおりに変えた）
 - 決定者：kajiwara
-- 関係するADR：[0039](0039-deliverables-and-intermediates.md)（成果物と中間結果）、[0044](0044-schema-enforcement-is-harness-part.md)（スキーマの強制は被験ハーネスの部品）、[0045](0045-card-name-strict-match.md)（カード名の比べ方）、[0052](0052-matching-procedure.md)（対応付けの手順）、[0056](0056-answer-card-name.md)（答えのカードに名前を足す）
+- 関係するADR：[0039](0039-deliverables-and-intermediates.md)（成果物と中間結果）、[0044](0044-schema-enforcement-is-harness-part.md)（スキーマの強制は被験ハーネスの部品）、[0045](0045-card-name-strict-match.md)（カード名の比べ方）、[0052](0052-matching-procedure.md)（対応付けの手順）、[0056](0056-answer-card-name.md)（答えのカードに名前を足す）、[0058](0058-grading-flow-by-stage.md)（採点の流れ）
+- 採点の段階：段階2（成績を付ける）。「① 答えが結ばれたマス」で、答えの名前を正解と比べる
 
 ## 背景
 
