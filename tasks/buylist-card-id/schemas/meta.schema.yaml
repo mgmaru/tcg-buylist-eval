@@ -76,7 +76,7 @@ properties:
       properties:
         row: {type: integer, minimum: 1}
         col: {type: integer, minimum: 1}
-        name: {type: string, minLength: 1}
+        name: {type: string, minLength: 1, description: 画像に印刷されている通りのカード名（gold.csv の name と同じ決まり。card_name ではない）。対応付けで、読み取ったカード名と比べる（ADR-0052）}
         reason:
           description: no_pack_number：パックごとの番号がない。unresolved：特定を確定できない
           enum: [no_pack_number, unresolved]
