@@ -7,7 +7,7 @@
 # 決まりの本文（text、examples）は、プロンプトに書き直しやすいよう、参照なしで読めるように書く。see は人のための出典。
 
 id: buylist-card-id
-version: 1
+version: 2                         # 2：特定したカードの名前（R-13）を足した（ADR-0056）
 summary: 買取表の画像1枚から、掲載されているカードを1枚ずつ読み取り、どのカードかを特定する。
 
 input:
@@ -47,9 +47,10 @@ rules:
     see: [ADR-0040]
   - id: R-04
     topic: 読み取り
-    text: カード名は、画像に印刷されている通りに出す。知識で補わない。
+    text: 読み取ったカード名（reading.name）は、画像に印刷されている通りに出す。知識で補わない。特定したカードの名前は、これとは別に出す（R-13）。
     examples:
       - {image: "ギラティナ", output: "ギラティナ", note: "画像にEXの表記がなければ、EXを付けない"}
+    see: [ADR-0056]
   - id: R-05
     topic: 読み取り
     text: HPとワザ名は、画像から読み取れる範囲で出す。読み取れないものは出さない。
@@ -78,6 +79,12 @@ rules:
       - {image: "1EDのマークが小さくて読めない", edition: 指定なし}
       - {image: "絵の上にスタンプが見当たらない", stamp: なし}
     see: [ADR-0027, ADR-0036, ADR-0043]
+  - id: R-13
+    topic: 特定
+    text: 特定したカードの名前（answer.card.name）は、そのカードの正式な名前を出す。そのカードに印刷されている名前で、画像で読めなかった部分（EXなど）も補ってよい。読み取ったカード名（reading.name）とは別に出し、読み取ったカード名を書き換えない。候補（candidates）にも、それぞれのカードの名前を出す。
+    examples:
+      - {image: "ギラティナ（EXの表記が画像で見えない）", reading_name: "ギラティナ", answer_card_name: "ギラティナEX"}
+    see: [ADR-0056]
 
   # 不明
   - id: R-10

@@ -1,6 +1,6 @@
 # タスクの目録（ADR-0016）。評価用ハーネスは、このファイルからタスクの中身の場所を知る。
 id: buylist-card-id
-version: 1
+version: 2                         # 2：答えのカードに名前を足した（ADR-0056）
 spec: spec.yaml                    # ADR-0030
 input:
   files: [input.jpg]

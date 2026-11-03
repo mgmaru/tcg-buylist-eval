@@ -7,7 +7,7 @@
 次の列を、この順で出します。1行目は列の名前にします。
 
 ```
-row,col,name,hp,price_text,price_jpy,pack,number,edition,finish,stamp,set_code,rarity,note
+row,col,name,hp,price_text,price_jpy,card_name,pack,number,edition,finish,stamp,set_code,rarity,note
 ```
 
 | 列 | 書き方 |
@@ -18,6 +18,7 @@ row,col,name,hp,price_text,price_jpy,pack,number,edition,finish,stamp,set_code,r
 | hp | 画像に印刷されている通りのHP。画像で読めなければ空にする |
 | price_text | 画像に書かれている通りの買取価格の文字（例：1.5万円）。価格がなければ空にする |
 | price_jpy | price_text を円の整数にしたもの（例：「¥1,800,000」→ 1800000、「1.5万円」→ 15000、「17万円」→ 170000）。価格がなければ空にする |
+| card_name | 特定したカードの正式な名前。そのカードに印刷されている名前で、画像で読めなかった部分（EXなど）も補う。name とは別の列で、name は画像の通りのまま書く |
 | pack | カードの収録パックの商品名から、シリーズの名前、商品の種類（「拡張パック」など）、かぎかっこを外したもの（例：「ポケモンカードゲームBW 拡張パック「ブラックコレクション」」→ ブラックコレクション）。プロモは「BWプロモ」のように、世代の名前に「プロモ」を付ける。型番（BW1など）は書かない |
 | number | カードに印刷されている通りの番号。分母やプロモの記号も含める（例：055/053、001/BW-P） |
 | edition | 版。`1ED`、`アンリミ`、`なし`（1EDのない世代）、`指定なし`（画像で確かめられない）のどれか |
@@ -30,7 +31,7 @@ row,col,name,hp,price_text,price_jpy,pack,number,edition,finish,stamp,set_code,r
 ## 迷ったとき
 - edition・finish は、画像で確かめられなければ `指定なし` にしてください。推測で埋めないでください。
 - stamp は、画像に見当たらなければ `なし` にしてください。画像が粗くて見分けられないときだけ `指定なし` にしてください。
-- どのパックのカードか決めきれないときは、pack と number を空にし、note に「要確認：」に続けて候補と迷った理由を書いてください。
+- どのパックのカードか決めきれないときは、card_name・pack・number を空にし、note に「要確認：」に続けて候補と迷った理由を書いてください。
 - 同じ名前のカードが複数のパックにある場合（レシラムなど）は、HP・ワザ・レアリティで見分けてください。
 - カードに番号が印刷されていない古いカード（旧裏、neo）や、番号の代わりに「DPBP#」とだけ書かれたカードは、pack と number を空にし、note に「要確認：番号なし」と書いてください。
 

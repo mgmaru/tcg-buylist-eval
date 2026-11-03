@@ -1,44 +1,46 @@
 {
   "grid": {
-    "rows": 3,
-    "cols": 7
+    "rows": 4,
+    "cols": 10
   },
   "cards": [
     {
       "position": {
-        "row": 1,
+        "row": 4,
         "col": 1
       },
       "reading": {
-        "name": "リザードン",
-        "hp": 160,
+        "name": "ブラッキー",
+        "hp": 90,
         "attacks": [
-          "ばくれつだん"
+          "つきかげのキバ",
+          "クイックアタック"
         ],
-        "price_text": "¥1,800,000"
+        "price_text": "17万円"
       },
       "answer": {
         "status": "identified",
         "card": {
-          "pack": "プラズマゲイル",
-          "number": "077/070",
+          "name": "ブラッキー",
+          "pack": "よみがえる伝説",
+          "number": "037/080",
           "variant": {
             "edition": "指定なし",
-            "finish": "ノーマル",
+            "finish": "指定なし",
             "stamp": "なし"
           }
         },
-        "price_jpy": 1800000,
+        "price_jpy": 170000,
         "confidence": 0.9
       }
     },
     {
       "position": {
-        "row": 1,
+        "row": 4,
         "col": 2
       },
       "reading": {
-        "name": "レシラム",
+        "name": "ヘルガー",
         "price_text": null
       },
       "answer": {
@@ -46,12 +48,13 @@
         "price_jpy": null,
         "candidates": [
           {
-            "pack": "ブラックコレクション",
-            "number": "055/053",
+            "name": "ヘルガー",
+            "pack": "よみがえる伝説",
+            "number": "043/080",
             "variant": {
               "edition": "指定なし",
               "finish": "指定なし",
-              "stamp": "指定なし"
+              "stamp": "なし"
             }
           }
         ]
