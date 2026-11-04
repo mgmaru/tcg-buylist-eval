@@ -81,6 +81,8 @@
 | [0057](0057-answer-card-name-is-graded.md) | 答えのカードの名前も成果物にし、成績で比べる（0039の一部を置き換え） | 採用 | 2026-11-04 |
 | [0058](0058-grading-flow-by-stage.md) | 採点を、受け取り・段階1（対応付け）・段階2（成績を付ける）に分け、成績は段階2だけで付ける（採点の流れの地図） | 採用 | 2026-11-04 |
 | [0059](0059-grades-and-diagnosis-in-separate-files.md) | 成績と診断は、別のファイル（metrics.json と diagnosis.json）に出す（0023の一部を置き換え） | 採用 | 2026-11-04 |
-| [0060](0060-results-folder-by-config-measurement-sample.md) | 結果は、タスク・被験構成・測定・サンプル・繰り返しの順の階層に置き、run_id はその道すじにする（0023の一部を置き換え） | 採用 | 2026-11-04 |
+| [0060](0060-results-folder-by-config-conditions-sample.md) | 結果は、タスク・被験構成・測定条件・サンプル・繰り返しの順の階層に置き、run_id はその道すじにする（0023の一部を置き換え） | 採用 | 2026-11-04 |
+| [0061](0061-subject-config-and-measurement-conditions.md) | 被験構成は「比べて選びたいもの」、測定条件は「比べるときにそろえたいもの」とし、測定条件もファイルで定義する（0021の一部を置き換え） | 採用 | 2026-11-04 |
+| [0062](0062-roles-question-setter-and-administrator.md) | 評価する側に、作問者と実施者の役を置き、評価用ハーネスは決まったことを読んで行うだけにする | 採用 | 2026-11-04 |
 
 調査の結果は [docs/research/](../research/) にある。
