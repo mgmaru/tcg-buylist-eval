@@ -299,11 +299,13 @@ tcg-buylist-eval/
 ├── runner/                   ②③ 実行スクリプト（評価用）
 ├── graders/                  ④ 採点器（評価用）
 ├── reporters/                ⑤ レポート出力、Langfuse送信（評価用）
-└── results/                  実行結果（.gitignore）
-    └── <run_id>/
-        ├── output.json
-        ├── metrics.json
-        └── run.yaml          実行条件の記録
+└── results/                  実行結果（.gitignore）。階層は 8.6
+    └── <タスク>/<被験構成>/<測定>/<サンプル>/r<繰り返し>/
+        ├── run.yaml          実行記録
+        ├── trace.jsonl       トレース
+        ├── output.json       答案
+        ├── metrics.json      成績
+        └── diagnosis.json    診断
 ```
 
 `subject/` は **評価される側** で、`runner/`・`graders/`・`reporters/` は **評価する側**。フォルダで分けておき、評価する側が被験ハーネスの中身に依存しないようにする。
@@ -414,8 +416,8 @@ gold_version: 1
 
 | 項目 | 例 |
 |---|---|
-| `run_id` | 実行ごとの一意なID |
-| `task_id`／`config_id`／`repeat` | 何を、どの構成で、何回目に実行したか |
+| `run_id` | 実行ごとの一意なID。`results/` の下の道すじ（8.6） |
+| タスク／`sample_id`／被験構成／測定／`repeat` | どのタスクの、どのサンプルを、どの被験構成で、どの測定の何回目に解いたか（8.6） |
 | `runtime` と `runtime_version` | claude-code 2.x など |
 | `model` | 実際に使われたモデル名 |
 | `config_hash` | 構成ファイルとプロンプトのハッシュ値 |
@@ -762,17 +764,59 @@ flowchart TB
 |---|---|---|---|---|---|
 | `metrics.json` | 1つのサンプルの、1回の実行（答案1枚） | 成績：カードごとの成績、足し算できる件数（`counts`）、その答案の率（`scores`） | 採点器の `grade` | 実行のたびに、実行スクリプトが呼ぶ | `summarize`、Langfuse（`scores` を写す）、人 |
 | `diagnosis.json` | `metrics.json` と同じ（2つで1組） | 診断：段階0〜2で見つけたことの一覧 | 採点器の `grade`（`metrics.json` と一緒に出す） | `metrics.json` と同じ | 被験ハーネスを直す人、レポート（診断の件数と一覧。まとめ方は未定） |
-| `summary.json` | 1つの被験構成の、すべてのサンプルと繰り返し | 成績表：件数を足してから出した率と内訳、ばらつき、合格の判定 | 採点器の `summarize` | 未定（案：被験構成の実行がすべて終わったあと、実行スクリプトが呼ぶ） | レポート（比較表の1行）。レポートは、中身の意味を知らずに表示する |
+| `summary.json` | 1つの被験構成の、1回の測定（すべてのサンプルと繰り返し） | 成績表：件数を足してから出した率と内訳、ばらつき、合格の判定 | 採点器の `summarize` | 未定（案：1回の測定の実行がすべて終わったあと、実行スクリプトが呼ぶ） | レポート（比較表の1行）。レポートは、中身の意味を知らずに表示する |
 
 - 試験に見立てると、`metrics.json` は答案1枚の採点結果（どの問題が○か×か）、`diagnosis.json` は同じ答案に書き込む赤ペンのメモ（どこで、なぜ間違えたか）、`summary.json` は生徒1人の成績表にあたる。
 - `summary.json` を採点器が作るのは、「件数を足してから率を出す」という集計の仕方がタスクごとに違い、それを採点器の中に閉じ込めるためである。レポートは、タスクの中身を知らなくて済む（ADR-0023）。
 
-コマンドが受け取るものと、出すもの（ADR-0023、ADR-0059）：
+コマンドが受け取るものと、出すもの（ADR-0023、ADR-0059、ADR-0060）：
 
 | コマンド | 受け取るもの | 出すもの |
 |---|---|---|
 | `grade` | 1つのサンプルの出力JSON、正解データ、メタ情報、実行の情報（`run.json`） | `metrics.json` と `diagnosis.json`（サンプル1つ分） |
-| `summarize` | 1つの被験構成の、すべての `metrics.json`、`task.yaml`（合格ライン）、実行の情報 | `summary.json` |
+| `summarize` | 1つの被験構成の、1回の測定の、すべての `metrics.json`、`task.yaml`（合格ライン）、実行の情報 | `summary.json` |
+
+#### 結果の置き場所
+
+結果は、次の階層に置く。被験構成をサンプルより上にするので、被験構成ごとに、どのサンプルでどうだったかが並ぶ（[ADR-0060](adr/0060-results-folder-by-config-measurement-sample.md)）。
+
+```
+results/<タスク>/<被験構成>/<測定>/<サンプル>/r<繰り返し>/
+├── run.yaml        実行記録（5.5）
+├── trace.jsonl     トレース（ADR-0050）
+├── output.json     答案
+├── metrics.json    成績
+└── diagnosis.json  診断
+```
+
+| 階層 | 中身 | 例 |
+|---|---|---|
+| タスク | タスク | `buylist-card-id` |
+| 被験構成 | 被験構成の名前（[ADR-0021](adr/0021-subject-config-split.md)） | `qwen-h0` |
+| 測定 | 同じ被験構成を、同じ条件で、決めたサンプルと繰り返しの回数だけ、まとめて実行したもの | 名前の付け方は未定 |
+| サンプル | `sample_id` | `magi-nagoya-20261030` |
+| 繰り返し | 1回の測定の中で、同じサンプルを何回目に解いたか（1〜被験構成の `repeats`） | `r1` |
+
+- `run_id` は、`results/` の下の道すじにする（例：`buylist-card-id/qwen-h0/<測定>/magi-nagoya-20261030/r1`）。
+- 名前は人が読むため、中の項目は機械が読むため、と分ける。`run.yaml`・`metrics.json`・`diagnosis.json` の中にも、タスク・被験構成・測定・`sample_id`・`repeat` を項目として書く。採点器やレポートは、`run_id` を分解して読まない。
+- `summarize` は、1つの被験構成の、1回の測定ごとに、`summary.json` を作る。
+- 同じサンプルで被験構成どうしを見比べる表は、レポートが、中の項目を読んで並べ直す。
+
+例：devのサンプルAで改善し、testのサンプルBで確かめる（測定の名前は仮）。
+
+```
+results/buylist-card-id/
+├── qwen-h0/
+│   └── <測定1>/                       ← devのAで測る
+│       └── magi-nagoya-20261030/ r1, r2, r3
+└── qwen-h1/
+    ├── <測定1>/                       ← devのAで測る
+    │   └── magi-nagoya-20261030/ r1, r2, r3
+    └── <測定2>/                       ← testのBで確かめる
+        └── torekingu-akiba-20261025/ r1, r2, r3
+```
+
+#### `metrics.json` の外側の形
 
 `metrics.json` は、タスクが変わっても共通の外側の形と、タスクごとの中身に分ける（ADR-0023）。
 
@@ -794,6 +838,7 @@ flowchart TB
 - `summary.json` の中身（8.7 の指標）
 - `status` の値と、形式の誤りの単位（ADR-0041）との関係
 - `summarize` を、いつ・誰が呼ぶか
+- 測定を何で区別し、どう名付けるか。サンプルの集まり（devとtestなど）を、どこに書くか（ADR-0060）
 - `diagnosis.json` の1件の記録の形（8.5）と、診断を被験構成ごとにどうまとめるか（`summarize` が数えるか、レポートが `diagnosis.json` を読むか）
 
 ### 8.7 指標
@@ -822,7 +867,7 @@ flowchart TB
 | トークン数・ターン数 | 結果のフォルダのトレース（[ADR-0050](adr/0050-trace-as-jsonl.md)） |
 | 保留の件数 | 成績から。人が確かめる手間の目安 |
 
-**安定性**：同じタスク×構成を `repeats` 回実行し、正解率の平均・最悪値・標準偏差を見る（[ADR-0024](adr/0024-show-harness-changes-and-effects.md)）。
+**安定性**：1回の測定の中で、サンプルごとに `repeats` 回ずつ解かせ、正解率の平均・最悪値・標準偏差を見る（[ADR-0024](adr/0024-show-harness-changes-and-effects.md)、ADR-0060）。
 
 ### 8.8 合格ライン（仮）
 
