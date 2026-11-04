@@ -80,5 +80,6 @@
 | [0056](0056-answer-card-name.md) | 答えのカードに、カードの名前（name）を足す | 採用 | 2026-11-03 |
 | [0057](0057-answer-card-name-is-graded.md) | 答えのカードの名前も成果物にし、成績で比べる（0039の一部を置き換え） | 採用 | 2026-11-04 |
 | [0058](0058-grading-flow-by-stage.md) | 採点を、受け取り・段階1（対応付け）・段階2（成績を付ける）に分け、成績は段階2だけで付ける（採点の流れの地図） | 採用 | 2026-11-04 |
+| [0059](0059-grades-and-diagnosis-in-separate-files.md) | 成績と診断は、別のファイル（metrics.json と diagnosis.json）に出す（0023の一部を置き換え） | 採用 | 2026-11-04 |
 
 調査の結果は [docs/research/](../research/) にある。
