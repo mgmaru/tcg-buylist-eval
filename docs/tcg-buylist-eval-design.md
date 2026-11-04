@@ -153,6 +153,21 @@ flowchart TB
     SUBJ -- カード一覧（JSON） --> G
 ```
 
+#### 役（誰が、何を決めるか）
+
+評価する側の中に、作問者と実施者の役を置く。評価用ハーネスの仕組み（コード）は、何を、どんな条件で測るかを持たず、作問者と実施者が決めたことをファイルから読んで行うだけにする（[ADR-0062](adr/0062-roles-question-setter-and-administrator.md)）。
+
+| 役 | 側 | 試験でいうと | 決めること・作るもの | ファイル |
+|---|---|---|---|---|
+| 作問者 | 評価する側 | 問題と模範解答を作る | タスクの仕様、出力のスキーマ、サンプル、正解データ | `tasks/<タスク>/` |
+| 実施者 | 評価する側 | 試験の会場・決まり・回数を決める | 測定条件（実行の環境、推論サーバーと実行スクリプトの版、繰り返しの回数 など） | `conditions/<条件名>.yaml` |
+| 評価用ハーネス | 評価する側 | 試験監督と採点者 | 実行、採点、集計、レポート | 実行スクリプト、採点器、レポートのコード |
+| 被験エージェントを作る人 | 評価される側 | 受験者を育てる | 被験構成、被験ハーネス、モデルの設定 | `configs/`、`subject/`、`models/` |
+| 被験エージェント | 評価される側 | 受験者 | 答案 | `output.json` |
+
+- 被験エージェントを作る人は、被験ハーネスを直すときに、タスクと測定条件のファイルを変えない。被験構成に有利な条件にしたり、testのサンプルに合わせ込んだりしないためである。
+- 今は、同じ人がすべての役を受け持つ。それでも、ファイルと決まりのうえで、役を分ける。
+
 ### 1.4 スコープ外
 
 | 対象外 | 理由・担当 |
@@ -293,20 +308,23 @@ tcg-buylist-eval/
 │   ├── opus-h0.yaml
 │   ├── sonnet-h0.yaml
 │   └── sonnet-h2.yaml
+├── conditions/               測定条件（実行の環境、繰り返しの回数 など。6.3）
 ├── subject/                  被験ハーネスの部品
 │   ├── prompts/              H0〜H3のプロンプト
 │   └── tools/card-db-search/ カードDB検索ツール（MCPサーバー）
 ├── runner/                   ②③ 実行スクリプト（評価用）
 ├── graders/                  ④ 採点器（評価用）
 ├── reporters/                ⑤ レポート出力、Langfuse送信（評価用）
-└── results/                  実行結果（.gitignore）
-    └── <run_id>/
-        ├── output.json
-        ├── metrics.json
-        └── run.yaml          実行条件の記録
+└── results/                  実行結果（.gitignore）。階層は 8.6
+    └── <タスク>/<被験構成>/<測定条件>/<サンプル>/r<繰り返し>/
+        ├── run.yaml          実行記録
+        ├── trace.jsonl       トレース
+        ├── output.json       答案
+        ├── metrics.json      成績
+        └── diagnosis.json    診断
 ```
 
-`subject/` は **評価される側** で、`runner/`・`graders/`・`reporters/` は **評価する側**。フォルダで分けておき、評価する側が被験ハーネスの中身に依存しないようにする。
+`subject/` は **評価される側** で、`runner/`・`graders/`・`reporters/` は **評価する側**。フォルダで分けておき、評価する側が被験ハーネスの中身に依存しないようにする。`tasks/` は作問者が、`conditions/` は実施者が、`configs/` と `subject/` は被験エージェントを作る人が受け持つ（1.3）。
 
 ---
 
@@ -414,8 +432,8 @@ gold_version: 1
 
 | 項目 | 例 |
 |---|---|
-| `run_id` | 実行ごとの一意なID |
-| `task_id`／`config_id`／`repeat` | 何を、どの構成で、何回目に実行したか |
+| `run_id` | 実行ごとの一意なID。`results/` の下の道すじ（8.6） |
+| タスク／`sample_id`／被験構成／測定条件／`repeat` | どのタスクの、どのサンプルを、どの被験構成で、どの測定条件の何回目に解いたか（8.6） |
 | `runtime` と `runtime_version` | claude-code 2.x など |
 | `model` | 実際に使われたモデル名 |
 | `config_hash` | 構成ファイルとプロンプトのハッシュ値 |
@@ -450,18 +468,69 @@ H0からH3は積み上げ式にし、**隣り合う段階の差分が1つだけ*
 
 ### 6.3 構成ファイルの例
 
+被験エージェントは、モデルの設定・被験ハーネス・被験構成の3つのファイルで定義する（[ADR-0021](adr/0021-subject-config-split.md)、[ADR-0022](adr/0022-harness-level-and-components.md)）。どんな条件で測るかは、被験構成とは別に、測定条件のファイルで定義する（[ADR-0061](adr/0061-subject-config-and-measurement-conditions.md)）。この4つのファイルがあれば、別の場所で同じ測定を作り直せる。
+
+| ファイル | 中身 | 決める役（1.3） |
+|---|---|---|
+| `models/<モデル名>.yaml` | どのモデルを、どこに、どの設定（思考、温度、コンテキスト長）で呼ぶか | 被験エージェントを作る人 |
+| `subject/<タスク名>/<被験ハーネスの名前>/harness.yaml` | 被験ハーネスの段階、足した部品とそのやり方、プロンプト、ツール | 被験エージェントを作る人 |
+| `configs/<構成名>.yaml` | 被験構成：どのモデルと、どの被験ハーネスを組み合わせ、どんな時間制限で動かすか | 被験エージェントを作る人 |
+| `conditions/<条件名>.yaml` | 測定条件：どこで、どう動かすか（実行の環境、推論サーバーと実行スクリプトの版、繰り返しの回数） | 実施者 |
+
+被験構成と測定条件の境目は、「比べて選びたいもの」か「比べるときにそろえたいもの」かで決める（ADR-0061）。
+
+| 項目 | どちらか |
+|---|---|
+| モデル（量子化を含む）、モデルの設定、被験ハーネス | 被験構成 |
+| 時間制限 | 被験構成（被験構成ごとの、安全のための打ち切り。速さは所要時間として別に測る） |
+| 実行の環境、推論サーバーの版、実行スクリプトの版、カードDBの版（M1から） | 測定条件 |
+| 繰り返しの回数 | 測定条件（同じ回数で比べる） |
+| 採点器の版、正解データの版 | どちらにも入れない（実行し直さずに、採点だけやり直せる。`metrics.json` に書く） |
+
+ファイルの例（ADR-0021・0022 の例をもとにした。測定条件のファイルの項目の名前は、まだ決めていない）：
+
 ```yaml
-id: sonnet-h2
-runtime: claude-code
-model: sonnet
-harness:
-  level: H2
-  prompt: subject/prompts/h2.md
-  tools: [card-db-search]
-  web_search: false        # 再現性のため、原則オフ
-  max_turns: 40
-  timeout_sec: 600
-repeats: 3                 # ばらつきを見るための繰り返し回数
+# models/qwen3-8-27b.yaml
+id: qwen3-8-27b
+provider: openai-compatible      # Ollama の OpenAI 互換の API
+name: qwen3.8:27b-q4
+endpoint: ${MODEL_ENDPOINT}      # 環境ごとに変わるので、直接書かない
+params:
+  thinking: false
+  num_ctx: 32768
+  temperature: 0
+```
+
+```yaml
+# subject/buylist-card-id/h0/harness.yaml
+id: buylist-card-id-h0
+level: H0
+type: direct-api
+components: []
+prompt:
+  file: prompt.md
+  variant: basic
+tools: []
+```
+
+```yaml
+# configs/qwen-h0.yaml
+id: qwen-h0
+task: buylist-card-id
+model: qwen3-8-27b
+harness: buylist-card-id-h0
+limits:
+  timeout_sec: 600               # 被験構成ごとの時間制限
+```
+
+```yaml
+# conditions/<条件名>.yaml（項目の名前は仮）
+id: <条件名>
+environment: aws-g6-xlarge       # 実行の環境
+infra: <インフラのコードの版>     # どの版のインフラのコードで作った環境か（ADR-0004）
+inference_server: ollama <版>    # 推論サーバーと、その版
+runner: <実行スクリプトの版>
+repeats: 3                       # 繰り返しの回数
 ```
 
 ### 6.4 実験の組み立て
@@ -762,17 +831,66 @@ flowchart TB
 |---|---|---|---|---|---|
 | `metrics.json` | 1つのサンプルの、1回の実行（答案1枚） | 成績：カードごとの成績、足し算できる件数（`counts`）、その答案の率（`scores`） | 採点器の `grade` | 実行のたびに、実行スクリプトが呼ぶ | `summarize`、Langfuse（`scores` を写す）、人 |
 | `diagnosis.json` | `metrics.json` と同じ（2つで1組） | 診断：段階0〜2で見つけたことの一覧 | 採点器の `grade`（`metrics.json` と一緒に出す） | `metrics.json` と同じ | 被験ハーネスを直す人、レポート（診断の件数と一覧。まとめ方は未定） |
-| `summary.json` | 1つの被験構成の、すべてのサンプルと繰り返し | 成績表：件数を足してから出した率と内訳、ばらつき、合格の判定 | 採点器の `summarize` | 未定（案：被験構成の実行がすべて終わったあと、実行スクリプトが呼ぶ） | レポート（比較表の1行）。レポートは、中身の意味を知らずに表示する |
+| `summary.json` | 1つの被験構成の、1つの測定条件（すべてのサンプルと繰り返し） | 成績表：件数を足してから出した率と内訳、ばらつき、合格の判定 | 採点器の `summarize` | 未定（案：1つの測定条件で、実行がすべて終わったあと、実行スクリプトが呼ぶ） | レポート（比較表の1行）。レポートは、中身の意味を知らずに表示する |
 
 - 試験に見立てると、`metrics.json` は答案1枚の採点結果（どの問題が○か×か）、`diagnosis.json` は同じ答案に書き込む赤ペンのメモ（どこで、なぜ間違えたか）、`summary.json` は生徒1人の成績表にあたる。
 - `summary.json` を採点器が作るのは、「件数を足してから率を出す」という集計の仕方がタスクごとに違い、それを採点器の中に閉じ込めるためである。レポートは、タスクの中身を知らなくて済む（ADR-0023）。
 
-コマンドが受け取るものと、出すもの（ADR-0023、ADR-0059）：
+コマンドが受け取るものと、出すもの（ADR-0023、ADR-0059、ADR-0060）：
 
 | コマンド | 受け取るもの | 出すもの |
 |---|---|---|
 | `grade` | 1つのサンプルの出力JSON、正解データ、メタ情報、実行の情報（`run.json`） | `metrics.json` と `diagnosis.json`（サンプル1つ分） |
-| `summarize` | 1つの被験構成の、すべての `metrics.json`、`task.yaml`（合格ライン）、実行の情報 | `summary.json` |
+| `summarize` | 1つの被験構成の、1つの測定条件の、すべての `metrics.json`、`task.yaml`（合格ライン）、実行の情報 | `summary.json` |
+
+#### 結果の置き場所
+
+結果は、次の階層に置く。被験構成をサンプルより上にするので、被験構成ごとに、どのサンプルでどうだったかが並ぶ。被験構成とサンプルの間には、測定条件（6.3）の階層を置く。条件が変われば、別のフォルダになる（[ADR-0060](adr/0060-results-folder-by-config-conditions-sample.md)）。
+
+```
+results/<タスク>/<被験構成>/<測定条件>/
+├── conditions.yaml          測定条件の写し（実際に使った定義）
+└── <サンプル>/r<繰り返し>/
+    ├── run.yaml             実行記録（5.5）
+    ├── trace.jsonl          トレース（ADR-0050）
+    ├── output.json          答案
+    ├── metrics.json         成績
+    └── diagnosis.json       診断
+```
+
+| 階層 | 中身 | 例 |
+|---|---|---|
+| タスク | タスク | `buylist-card-id` |
+| 被験構成 | 被験構成の名前（`configs/<構成名>.yaml`。[ADR-0021](adr/0021-subject-config-split.md)） | `qwen-h0` |
+| 測定条件 | 測定条件の名前（`conditions/<条件名>.yaml`。[ADR-0061](adr/0061-subject-config-and-measurement-conditions.md)） | 名前の付け方は未定 |
+| サンプル | `sample_id` | `magi-nagoya-20261030` |
+| 繰り返し | 同じ測定条件で、同じサンプルを、何回目に解いたか（1〜測定条件の繰り返しの回数） | `r1` |
+
+- `run_id` は、`results/` の下の道すじにする（例：`buylist-card-id/qwen-h0/<測定条件>/magi-nagoya-20261030/r1`）。
+- 名前は人が読むため、中の項目は機械が読むため、と分ける。`run.yaml`・`metrics.json`・`diagnosis.json` の中にも、タスク・被験構成・測定条件・`sample_id`・`repeat` を項目として書く。採点器やレポートは、`run_id` を分解して読まない。
+- `summarize` は、1つの被験構成の、1つの測定条件ごとに、`summary.json` を作る。
+- 同じサンプルで被験構成どうしを見比べる表は、レポートが、中の項目を読んで並べ直す。
+- 測り直しを、開始日時や通し番号、`dev-1` のような名前では区別しない。何が違うのかが分からなかったり、サンプルのことを二重に書いたりするためである（ADR-0060）。
+
+例：devのサンプルAで改善し、testのサンプルBで確かめ、条件を変えて測り直す（測定条件の名前は仮）。
+
+```
+results/buylist-card-id/
+├── qwen-h0/
+│   └── <条件1>/
+│       ├── conditions.yaml
+│       └── magi-nagoya-20261030/ r1, r2, r3        ← devのAで測る
+└── qwen-h1/
+    ├── <条件1>/
+    │   ├── conditions.yaml
+    │   ├── magi-nagoya-20261030/ r1, r2, r3        ← devのAで測る
+    │   └── torekingu-akiba-20261025/ r1, r2, r3    ← testのBで確かめる
+    └── <条件2>/                                     ← 実行スクリプトの不具合を直して、測り直した
+        ├── conditions.yaml
+        └── magi-nagoya-20261030/ r1, r2, r3
+```
+
+#### `metrics.json` の外側の形
 
 `metrics.json` は、タスクが変わっても共通の外側の形と、タスクごとの中身に分ける（ADR-0023）。
 
@@ -794,6 +912,8 @@ flowchart TB
 - `summary.json` の中身（8.7 の指標）
 - `status` の値と、形式の誤りの単位（ADR-0041）との関係
 - `summarize` を、いつ・誰が呼ぶか
+- 測定条件のファイルの項目と、条件名の付け方（ADR-0061）
+- devとtestを分けて集計する方法（M2でサンプルを分けるときに決める。ADR-0060）
 - `diagnosis.json` の1件の記録の形（8.5）と、診断を被験構成ごとにどうまとめるか（`summarize` が数えるか、レポートが `diagnosis.json` を読むか）
 
 ### 8.7 指標
@@ -822,7 +942,7 @@ flowchart TB
 | トークン数・ターン数 | 結果のフォルダのトレース（[ADR-0050](adr/0050-trace-as-jsonl.md)） |
 | 保留の件数 | 成績から。人が確かめる手間の目安 |
 
-**安定性**：同じタスク×構成を `repeats` 回実行し、正解率の平均・最悪値・標準偏差を見る（[ADR-0024](adr/0024-show-harness-changes-and-effects.md)）。
+**安定性**：同じ測定条件で、サンプルごとに、測定条件の繰り返しの回数だけ解かせ、正解率の平均・最悪値・標準偏差を見る（[ADR-0024](adr/0024-show-harness-changes-and-effects.md)、ADR-0060、ADR-0061）。
 
 ### 8.8 合格ライン（仮）
 
